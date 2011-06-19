@@ -45,6 +45,53 @@ public:
 		return avalue;
 	}
 
+	static std::vector<int> toIntegerArray(std::string str){
+		using namespace std;
+		vector<int> result;
+		vector<string> stringArray=String::split(str," ");
+		for(unsigned int i=0;i<stringArray.size();i++){
+			result.push_back(String::toInteger(stringArray[i]));
+		}
+		return result;
+	}
+
+	static std::vector<unsigned int> toUnsignedIntegerArray(std::string str){
+		using namespace std;
+		vector<unsigned int> result;
+		vector<string> stringArray=String::split(str," ");
+		for(unsigned int i=0;i<stringArray.size();i++){
+			result.push_back((unsigned int)String::toInteger(stringArray[i]));
+		}
+		return result;
+	}
+
+	static std::vector<unsigned char> toUnsignedCharArray(std::string str){
+		using namespace std;
+		vector<unsigned char> result;
+		vector<string> stringArray=String::split(str," ");
+		for(unsigned int i=0;i<stringArray.size();i++){
+			result.push_back((unsigned char)String::toInteger(stringArray[i]));
+		}
+		return result;
+	}
+
+	static double toDouble(char* str) {
+		toDouble(std::string(str));
+	}
+
+	static double toDouble(const char* str) {
+		toDouble(std::string(str));
+	}
+
+	static double toDouble(std::string str) {
+		using namespace std;
+		stringstream ss;
+		ss << str;
+		double avalue;
+		ss >> avalue;
+		return avalue;
+	}
+
 	static std::vector<std::string> split(std::string str, std::string delimitter) {
 		std::vector < std::string > result;
 		int n;
@@ -146,6 +193,24 @@ public:
 		return str;
 	}
 
+	static std::string toStringFromInteger(int avalue){
+		std::stringstream ss;
+		ss << avalue;
+		return ss.str();
+	}
+
+	static std::string toStringFromDouble(double avalue,unsigned int precision=3){
+		std::stringstream ss;
+		ss << std::setprecision(precision) << avalue;
+		return ss.str();
+	}
+
+	static std::string toHexString(unsigned int avalue,unsigned int width=2,std::string prefix="0x"){
+		using namespace std;
+		stringstream ss;
+		ss << prefix << setw(width) << setfill('0') << right << avalue;
+		return ss.str();
+	}
 
 };
 }

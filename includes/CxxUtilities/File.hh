@@ -71,39 +71,41 @@ public:
 		vector < string > lines = getAllLines(filnemae);
 		for (unsigned int i = 0; i < lines.size(); i++) {
 			vector < string > array = String::split(lines[i], " ");
-			result[array[0]] = array[1];
+			if (array.size() >= 2) {
+				result[array[0]] = array[1];
+			}
 		}
 		return result;
 	}
 
 public:
 	static std::string getCurrentWorkingDirectory() {
-		const unsigned int MaximumFilenameLength=10*1024;
-		char* buffer=new char[MaximumFilenameLength];
-		getcwd(buffer,MaximumFilenameLength);
+		const unsigned int MaximumFilenameLength = 10 * 1024;
+		char* buffer = new char[MaximumFilenameLength];
+		getcwd(buffer, MaximumFilenameLength);
 		std::string path(buffer);
 		delete buffer;
 		return path;
 	}
 
 public:
-	static std::string toFullPath(std::string relativePath) throw (FileException){
-		if(File::exists(relativePath)==false){
+	static std::string toFullPath(std::string relativePath) throw (FileException) {
+		if (File::exists(relativePath) == false) {
 			throw FileException(FileException::FileNotFound);
 		}
-		std::string path=File::getCurrentWorkingDirectory()+relativePath;
+		std::string path = File::getCurrentWorkingDirectory() + "/" + relativePath;
 		return path;
 	}
 
-	static std::string toAbsolutePath(std::string relativePath) throw (FileException){
+	static std::string toAbsolutePath(std::string relativePath) throw (FileException) {
 		return toFullPath(relativePath);
 	}
 
-	static std::string getFullPath(std::string relativePath) throw (FileException){
+	static std::string getFullPath(std::string relativePath) throw (FileException) {
 		return toFullPath(relativePath);
 	}
 
-	static std::string getAbsolutePath(std::string relativePath) throw (FileException){
+	static std::string getAbsolutePath(std::string relativePath) throw (FileException) {
 		return toFullPath(relativePath);
 	}
 };
