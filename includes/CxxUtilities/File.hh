@@ -8,15 +8,7 @@
 #ifndef FILE_HH_
 #define FILE_HH_
 
-#include <fstream>
-#include <vector>
-#include <map>
-#include <string>
-#include <stdlib.h>
-
-#include <unistd.h>
-#include <sys/param.h>
-
+#include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Exception.hh"
 #include "CxxUtilities/String.hh"
 
@@ -52,7 +44,7 @@ public:
 	static std::vector<std::string> getAllLines(std::string filename) throw (FileException) {
 		using namespace std;
 		vector < string > lines;
-		ifstream ifs(filename.c_str());
+		std::ifstream ifs(filename.c_str());
 		if (!ifs.is_open()) {
 			throw FileException(FileException::FileNotFound);
 		}

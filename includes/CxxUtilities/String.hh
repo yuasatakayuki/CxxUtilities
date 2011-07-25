@@ -8,13 +8,7 @@
 #ifndef STRING_HH_
 #define STRING_HH_
 
-#include <string>
-#include <sstream>
-#include <vector>
-#include <iomanip>
-#include <iostream>
-#include <cstdlib>
-#include <algorithm>
+#include "CxxUtilities/CommonHeader.hh"
 
 namespace CxxUtilities{
 
@@ -208,8 +202,25 @@ public:
 	static std::string toHexString(unsigned int avalue,unsigned int width=2,std::string prefix="0x"){
 		using namespace std;
 		stringstream ss;
-		ss << prefix << setw(width) << setfill('0') << right << avalue;
+		ss << prefix << setw(width) << setfill('0') << right << hex << avalue << dec;
 		return ss.str();
+	}
+
+	static bool includes(std::string str,std::string searched_str){
+		if(str.find(searched_str)==std::string::npos){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	static size_t indexOf(std::string str,std::string searched_str){
+		size_t result=str.find(searched_str);
+		if(result==std::string::npos){
+			return std::string::npos;
+		}else{
+			return result;
+		}
 	}
 
 };

@@ -8,10 +8,7 @@
 #ifndef TIME_HH_
 #define TIME_HH_
 
-#include <string>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+#include "CxxUtilities/CommonHeader.hh"
 
 namespace CxxUtilities {
 class Time {
