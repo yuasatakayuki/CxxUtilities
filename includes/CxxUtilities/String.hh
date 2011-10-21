@@ -70,11 +70,11 @@ public:
 	}
 
 	static double toDouble(char* str) {
-		toDouble(std::string(str));
+		return toDouble(std::string(str));
 	}
 
 	static double toDouble(const char* str) {
-		toDouble(std::string(str));
+		return toDouble(std::string(str));
 	}
 
 	static double toDouble(std::string str) {
@@ -88,7 +88,7 @@ public:
 
 	static std::vector<std::string> split(std::string str, std::string delimitter) {
 		std::vector < std::string > result;
-		int n;
+		size_t n;
 		for (int i = 0; i <= str.length(); i = n + 1) {
 			n = str.find_first_of(delimitter, i);
 			if (n == std::string::npos) {
@@ -114,7 +114,7 @@ public:
 
 	static std::string join(std::vector<std::string> list, std::string conjunction) {
 		std::stringstream ss;
-		int size = list.size();
+		size_t size = list.size();
 		for (int i = 0; i < size; i++) {
 			if (i == size - 1) {
 				ss << list[i];
@@ -127,7 +127,7 @@ public:
 
 	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, int from, int to) {
 		std::vector < std::string > newlist;
-		int size = list.size();
+		size_t size = list.size();
 		if (from < 0) {
 			from = size + from;
 		}

@@ -15,5 +15,9 @@
 #include "CxxUtilities/Time.hh"
 #include "CxxUtilities/Bitset.hh"
 #include "CxxUtilities/Array.hh"
+#include "CxxUtilities/Mutex.hh"
+#include "CxxUtilities/Condition.hh"
+#include "CxxUtilities/Thread.hh"
+#include "CxxUtilities/TCPSocket.hh"
 
 #endif /* CXXUTILITIES_HH_ */

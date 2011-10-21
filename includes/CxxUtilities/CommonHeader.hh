@@ -17,6 +17,8 @@
 #include <fstream>
 #include <map>
 #include <queue>
+#include <list>
+#include <cmath>
 
 #include <stdlib.h>
 #include <unistd.h>

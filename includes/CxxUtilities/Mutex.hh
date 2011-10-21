@@ -28,6 +28,7 @@ class Mutex {
 private:
 	pthread_mutex_t mutex;
 	pthread_mutexattr_t mutex_attr;
+
 public:
 	Mutex() {
 		pthread_mutexattr_init(&mutex_attr);

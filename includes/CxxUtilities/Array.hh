@@ -88,7 +88,6 @@ public:
 	static Array<std::string>* arrayBySplittingString(std::string str, std::string delimitter) {
 		return newBySplittingString(str, delimitter);
 	}
-
 };
 
 }
