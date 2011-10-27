@@ -36,5 +36,9 @@
 #include <string.h>
 #include <errno.h>
 
+#include <typeinfo>
+#include <cxxabi.h>
+
+
 
 #endif /* COMMONHEADER_HH_ */
