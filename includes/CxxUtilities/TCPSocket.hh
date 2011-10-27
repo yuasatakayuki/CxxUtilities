@@ -89,7 +89,7 @@ public:
 	}
 
 public:
-	int send(void* data, unsigned int length) throw (TCPSocketException) {
+	int send(void* data, size_t length) throw (TCPSocketException) {
 		int result = ::send(socketdescriptor, data, length, 0);
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::TCPSocketError);
