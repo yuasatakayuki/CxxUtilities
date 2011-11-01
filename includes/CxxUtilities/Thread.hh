@@ -89,5 +89,22 @@ protected:
 	Condition condition;
 };
 
+class StoppableThread : public CxxUtilities::Thread {
+private:
+	bool stopped;
+public:
+	StoppableThread(){
+		stopped=true;
+	}
+
+	void stop(){
+		stopped=true;
+	}
+
+	bool isStopped(){
+		return stopped;
+	}
+};
+
 }
 #endif /* THREAD_HH_ */

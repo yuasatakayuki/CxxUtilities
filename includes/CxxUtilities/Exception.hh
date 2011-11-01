@@ -8,6 +8,8 @@
 #ifndef EXCEPTION_HH_
 #define EXCEPTION_HH_
 
+#include "ClassInformation.hh"
+
 namespace CxxUtilities {
 
 class Exception {
@@ -26,6 +28,11 @@ public:
 public:
 	Exception(unsigned int status) {
 		this->status = status;
+	}
+
+public:
+	virtual std::string toString(){
+		return ClassInformation::demangle(typeid(*this).name());
 	}
 
 };
