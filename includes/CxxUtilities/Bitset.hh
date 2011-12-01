@@ -12,8 +12,15 @@
 
 namespace CxxUtilities {
 
+/** A class which provides utility functions related to a set of bits.
+ * std::bitset is used as an interface class.
+ */
 class Bitset {
 public:
+	/** Generates a std::bitset which contains a subset of an input bitset.
+	 * @param bits original bitset.
+	 * @return subset of the original.
+	 */
 	template<int inputBitsetWidth, int index, int size>
 	static std::bitset<size> getSubset(std::bitset<inputBitsetWidth>& bits) {
 		std::bitset < size > result;
@@ -23,6 +30,9 @@ public:
 		return result;
 	}
 
+	/** Joins two bitsets.
+	 * @return a joined bitset.
+	 */
 	template<int bitset1Width, int bitset2Width>
 	static std::bitset<bitset1Width + bitset2Width> join(std::bitset<bitset1Width>& bits1,
 			std::bitset<bitset2Width>& bits2) {
@@ -36,6 +46,11 @@ public:
 		return result;
 	}
 
+	/** Replaces a range of bitset with other bitset.
+	 * @param target a bitset which will be partially replaced.
+	 * @param subset a bitset which replaces the original bitset.
+	 * @return a replaced bitset.
+	 */
 	template<int inputBitsetWidth, int index, int replaceWidth>
 	static std::bitset<inputBitsetWidth> replace(std::bitset<inputBitsetWidth>& target,
 			std::bitset<replaceWidth>& subset) {

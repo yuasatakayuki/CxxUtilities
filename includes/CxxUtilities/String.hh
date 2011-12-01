@@ -10,7 +10,7 @@
 
 #include "CxxUtilities/CommonHeader.hh"
 
-namespace CxxUtilities{
+namespace CxxUtilities {
 
 namespace CCTYPE {
 #include <ctype.h>
@@ -39,32 +39,104 @@ public:
 		return avalue;
 	}
 
-	static std::vector<int> toIntegerArray(std::string str){
+	static uint32_t toUInt32(std::string str) {
+		using namespace std;
+		stringstream ss;
+		ss << str;
+		uint32_t avalue;
+		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
+			ss >> hex >> avalue;
+		} else {
+			ss >> avalue;
+		}
+		return avalue;
+	}
+
+	static uint64_t toUInt64(std::string str) {
+		using namespace std;
+		stringstream ss;
+		ss << str;
+		uint64_t avalue;
+		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
+			ss >> hex >> avalue;
+		} else {
+			ss >> avalue;
+		}
+		return avalue;
+	}
+
+	static std::vector<int> toIntegerArray(std::string str) {
 		using namespace std;
 		vector<int> result;
-		vector<string> stringArray=String::split(str," ");
-		for(unsigned int i=0;i<stringArray.size();i++){
+		vector<string> stringArray = String::split(str, " ");
+		for (unsigned int i = 0; i < stringArray.size(); i++) {
 			result.push_back(String::toInteger(stringArray[i]));
 		}
 		return result;
 	}
 
-	static std::vector<unsigned int> toUnsignedIntegerArray(std::string str){
+	static std::vector<unsigned int> toUnsignedIntegerArray(std::string str) {
 		using namespace std;
 		vector<unsigned int> result;
-		vector<string> stringArray=String::split(str," ");
-		for(unsigned int i=0;i<stringArray.size();i++){
-			result.push_back((unsigned int)String::toInteger(stringArray[i]));
+		vector<string> stringArray = String::split(str, " ");
+		for (unsigned int i = 0; i < stringArray.size(); i++) {
+			result.push_back((unsigned int) String::toInteger(stringArray[i]));
 		}
 		return result;
 	}
 
-	static std::vector<unsigned char> toUnsignedCharArray(std::string str){
+	static std::vector<unsigned char> toUnsignedCharArray(std::string str) {
 		using namespace std;
 		vector<unsigned char> result;
-		vector<string> stringArray=String::split(str," ");
-		for(unsigned int i=0;i<stringArray.size();i++){
-			result.push_back((unsigned char)String::toInteger(stringArray[i]));
+		vector<string> stringArray = String::split(str, " ");
+		for (unsigned int i = 0; i < stringArray.size(); i++) {
+			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1] == 'X')) {
+				uint32_t avalue=0;
+				size_t o = 2;
+				while (o < stringArray[i].size()) {
+					std::stringstream ss;
+					if (o + 1 == stringArray[i].size()) {//read one character
+						ss << "0x" << stringArray[i].substr(o,1);
+						o++;
+					} else {//read two characters
+						ss << "0x" << stringArray[i].substr(o,2);
+						o+=2;
+					}
+					ss >> hex >> avalue;
+					result.push_back((unsigned char)avalue);
+				}
+			} else {
+				unsigned char avalue = (unsigned char) String::toUInt32(stringArray[i]);
+				result.push_back(avalue);
+			}
+		}
+		return result;
+	}
+
+	static std::vector<uint8_t> toUInt8Array(std::string str) {
+		using namespace std;
+		vector<unsigned char> result;
+		vector<string> stringArray = String::split(str, " ");
+		for (unsigned int i = 0; i < stringArray.size(); i++) {
+			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1] == 'X')) {
+				uint32_t avalue=0;
+				size_t o = 2;
+				while (o < stringArray[i].size()) {
+					std::stringstream ss;
+					if (o + 1 == stringArray[i].size()) {//read one character
+						ss << "0x" << stringArray[i].substr(o,1);
+						o++;
+					} else {//read two characters
+						ss << "0x" << stringArray[i].substr(o,2);
+						o+=2;
+					}
+					ss >> hex >> avalue;
+					result.push_back((uint8_t)avalue);
+				}
+			} else {
+				uint8_t uint8_value = (uint8_t) String::toUInt32(stringArray[i]);
+				result.push_back(uint8_value);
+			}
 		}
 		return result;
 	}
@@ -87,7 +159,7 @@ public:
 	}
 
 	static std::vector<std::string> split(std::string str, std::string delimitter) {
-		std::vector < std::string > result;
+		std::vector<std::string> result;
 		size_t n;
 		for (int i = 0; i <= str.length(); i = n + 1) {
 			n = str.find_first_of(delimitter, i);
@@ -126,7 +198,7 @@ public:
 	}
 
 	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, int from, int to) {
-		std::vector < std::string > newlist;
+		std::vector<std::string> newlist;
 		size_t size = list.size();
 		if (from < 0) {
 			from = size + from;
@@ -152,7 +224,7 @@ public:
 		return newlist;
 	}
 
-	static std::string dumpAddress(void* address,unsigned int width=4) {
+	static std::string dumpAddress(void* address, unsigned int width = 4) {
 		std::stringstream ss;
 		ss << "0x" << std::setw(width) << std::setfill('0') << std::hex << (long long) address;
 		return ss.str();
@@ -169,9 +241,9 @@ public:
 
 	static std::string toLowerCase(std::string str) {
 		using namespace std;
-		for(unsigned int i=0;i<str.size();i++){
-			if('A'<=str[i] && str[i]<='Z'){
-				str[i]=str[i]-'A'+'a';
+		for (unsigned int i = 0; i < str.size(); i++) {
+			if ('A' <= str[i] && str[i] <= 'Z') {
+				str[i] = str[i] - 'A' + 'a';
 			}
 		}
 		return str;
@@ -179,46 +251,46 @@ public:
 
 	static std::string toUpperCase(std::string str) {
 		using namespace std;
-		for(unsigned int i=0;i<str.size();i++){
-			if('a'<=str[i] && str[i]<='z'){
-				str[i]=str[i]-'a'+'A';
+		for (unsigned int i = 0; i < str.size(); i++) {
+			if ('a' <= str[i] && str[i] <= 'z') {
+				str[i] = str[i] - 'a' + 'A';
 			}
 		}
 		return str;
 	}
 
-	static std::string toStringFromInteger(int avalue){
+	static std::string toStringFromInteger(int avalue) {
 		std::stringstream ss;
 		ss << avalue;
 		return ss.str();
 	}
 
-	static std::string toStringFromDouble(double avalue,unsigned int precision=3){
+	static std::string toStringFromDouble(double avalue, unsigned int precision = 3) {
 		std::stringstream ss;
 		ss << std::setprecision(precision) << avalue;
 		return ss.str();
 	}
 
-	static std::string toHexString(unsigned int avalue,unsigned int width=2,std::string prefix="0x"){
+	static std::string toHexString(unsigned int avalue, unsigned int width = 2, std::string prefix = "0x") {
 		using namespace std;
 		stringstream ss;
 		ss << prefix << setw(width) << setfill('0') << right << hex << avalue << dec;
 		return ss.str();
 	}
 
-	static bool includes(std::string str,std::string searched_str){
-		if(str.find(searched_str)==std::string::npos){
+	static bool includes(std::string str, std::string searched_str) {
+		if (str.find(searched_str) == std::string::npos) {
 			return false;
-		}else{
+		} else {
 			return true;
 		}
 	}
 
-	static size_t indexOf(std::string str,std::string searched_str){
-		size_t result=str.find(searched_str);
-		if(result==std::string::npos){
+	static size_t indexOf(std::string str, std::string searched_str) {
+		size_t result = str.find(searched_str);
+		if (result == std::string::npos) {
 			return std::string::npos;
-		}else{
+		} else {
 			return result;
 		}
 	}

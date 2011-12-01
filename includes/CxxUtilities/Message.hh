@@ -24,18 +24,29 @@ public:
 	}
 };
 
+/** A class which provides a wrapper for a condition object used for inter-thread communication.
+ * By using this class, a thread can send a string message to another thread.
+ */
 class Message {
 private:
 	std::queue<std::string*> messagequeue;
 	Mutex messagequeuemutex;
 	Condition condition;
 public:
+	/** Constructs an instance.
+	 */
 	Message() {
 	}
 
+	/** Destructor.
+	 */
 	~Message() {
 	}
 
+public:
+	/** Sends a string message.
+	 * @param message a message string.
+	 */
 	void send(std::string message) throw (MessageException) {
 		if (message.size() > BufferSize) {
 			throw MessageException(MessageException::MessageIsTooLong);
@@ -48,10 +59,20 @@ public:
 		condition.signal();
 	}
 
+	/** Trys to receive a message from another thread.
+	 * This method will wait forever.
+	 * @return a received message string.
+	 */
 	std::string receive() throw (MessageException) {
 		return this->receive(0);
 	}
 
+
+	/** Trys to receive a message from another thread.
+	 * This method will time out in a specified time.
+	 * @param timeoutInMillisecond timeout duration in millisecond.
+	 * @return a received message string.
+	 */
 	std::string receive(int timeoutInMillisecond) throw (MessageException) {
 		using namespace std;
 		int ellapsedtime = 0;
@@ -72,6 +93,7 @@ public:
 		}
 		goto loop;
 	}
+
 public:
 	static const unsigned int BufferSize = 256;
 	static const int DepthOfMessageQueue = 1024;

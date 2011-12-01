@@ -90,7 +90,7 @@ protected:
 };
 
 class StoppableThread : public CxxUtilities::Thread {
-private:
+protected:
 	bool stopped;
 public:
 	StoppableThread(){

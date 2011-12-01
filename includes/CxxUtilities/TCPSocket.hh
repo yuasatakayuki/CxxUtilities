@@ -151,7 +151,7 @@ public:
 	}
 
 	void setTimeout(double durationInMilliSec) {
-		if (socketdescriptor != NULL) {
+		if (socketdescriptor != 0) {
 			timeoutDurationInMilliSec = durationInMilliSec;
 			struct timeval tv;
 			tv.tv_sec = (unsigned int) (floor(durationInMilliSec / 1000.));
