@@ -89,16 +89,16 @@ public:
 	}
 
 public:
-	int send(void* data, size_t length) throw (TCPSocketException) {
-		int result = ::send(socketdescriptor, data, length, 0);
+	long send(void* data, size_t length) throw (TCPSocketException) {
+		long result = ::send(socketdescriptor, data, length, 0);
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::TCPSocketError);
 		}
 		return result;
 	}
 
-	int receive(void* data, unsigned int length) throw (TCPSocketException) {
-		ssize_t result = ::recv(socketdescriptor, data, length, 0);
+	long receive(void* data, unsigned int length) throw (TCPSocketException) {
+		long result = ::recv(socketdescriptor, data, length, 0);
 		if (result <= 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK) {
 				throw TCPSocketException(TCPSocketException::Timeout);

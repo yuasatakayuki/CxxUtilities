@@ -161,7 +161,7 @@ public:
 	static std::vector<std::string> split(std::string str, std::string delimitter) {
 		std::vector<std::string> result;
 		size_t n;
-		for (int i = 0; i <= str.length(); i = n + 1) {
+		for (size_t i = 0; i <= str.length(); i = n + 1) {
 			n = str.find_first_of(delimitter, i);
 			if (n == std::string::npos) {
 				n = str.length();
@@ -197,7 +197,7 @@ public:
 		return ss.str();
 	}
 
-	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, int from, int to) {
+	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, size_t from, size_t to) {
 		std::vector<std::string> newlist;
 		size_t size = list.size();
 		if (from < 0) {
@@ -213,11 +213,11 @@ public:
 			return newlist;
 		}
 		if (from <= to) {
-			for (int i = from; i <= to; i++) {
+			for (size_t i = from; i <= to; i++) {
 				newlist.push_back(list[i]);
 			}
 		} else {
-			for (int i = to; i <= from; i++) {
+			for (size_t i = to; i <= from; i++) {
 				newlist.push_back(list[i]);
 			}
 		}
@@ -241,7 +241,7 @@ public:
 
 	static std::string toLowerCase(std::string str) {
 		using namespace std;
-		for (unsigned int i = 0; i < str.size(); i++) {
+		for (size_t i = 0; i < str.size(); i++) {
 			if ('A' <= str[i] && str[i] <= 'Z') {
 				str[i] = str[i] - 'A' + 'a';
 			}
@@ -251,7 +251,7 @@ public:
 
 	static std::string toUpperCase(std::string str) {
 		using namespace std;
-		for (unsigned int i = 0; i < str.size(); i++) {
+		for (size_t i = 0; i < str.size(); i++) {
 			if ('a' <= str[i] && str[i] <= 'z') {
 				str[i] = str[i] - 'a' + 'A';
 			}
