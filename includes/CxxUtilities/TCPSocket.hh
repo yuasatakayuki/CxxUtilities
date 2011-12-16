@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef TCPSOCKET_HH_
-#define TCPSOCKET_HH_
+#ifndef CXXUTILITIES_TCPSOCKET_HH_
+#define CXXUTILITIES_TCPSOCKET_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Exception.hh"
@@ -74,6 +74,7 @@ public:
 	}
 
 	~TCPSocket() {
+		
 	}
 
 	int getStatus() {
@@ -370,6 +371,7 @@ public:
 	}
 
 	void connect(double timeoutDurationInMilliSec) throw (TCPSocketException) {
+		using namespace std;
 		int result;
 		if (status == TCPSocketConnected) {
 			return;
@@ -387,41 +389,43 @@ public:
 			serveraddress.sin_addr.s_addr = *((unsigned long*) hostentry->h_addr_list[0]);
 		}
 
-		result=0;
-
-		int flag=fcntl(socketdescriptor,F_GETFL,0);
-		if(flag<0){
+		result = 0;
+		int flag = fcntl(socketdescriptor, F_GETFL, 0);
+		if (flag < 0) {
 			throw TCPSocketException(TCPSocketException::ConnectExceptionWhenChangingSocketModeToNonBlocking);
 		}
-		if(fcntl(socketdescriptor, F_SETFL, flag|O_NONBLOCK)<0){
+		if (fcntl(socketdescriptor, F_SETFL, flag | O_NONBLOCK) < 0) {
 			throw TCPSocketException(TCPSocketException::ConnectExceptionWhenChangingSocketModeToNonBlocking);
 		}
-
 
 		result = ::connect(socketdescriptor, (struct ::sockaddr*) &serveraddress, sizeof(struct ::sockaddr_in));
+
 		if (result < 0) {
 			//if(result==EINPROGRESS){
-				struct timeval tv;
-				tv.tv_sec = (unsigned int) (floor(timeoutDurationInMilliSec / 1000.));
-				tv.tv_usec = (int) ((timeoutDurationInMilliSec - floor(timeoutDurationInMilliSec)) * 1000);
-				fd_set rmask,wmask;FD_ZERO(&rmask);FD_SET(socketdescriptor,&rmask);wmask=rmask;
-				result=select(socketdescriptor+1,&rmask, &wmask, NULL, &tv);
-				if(result==0){
-					//timeout happened
-					throw TCPSocketException(TCPSocketException::Timeout);
-				}else{
-					//connected
-					status = TCPSocketConnected;
-					//reset flag
-					if(fcntl(socketdescriptor, F_SETFL, flag)<0){
-						throw TCPSocketException(TCPSocketException::ConnectExceptionWhenChangingSocketModeToBlocking);
-					}
-					return;
+			struct timeval tv;
+			tv.tv_sec = (unsigned int) (floor(timeoutDurationInMilliSec / 1000.));
+			tv.tv_usec = (int) ((timeoutDurationInMilliSec - floor(timeoutDurationInMilliSec)) * 1000);
+			fd_set rmask, wmask;
+			FD_ZERO(&rmask);
+			FD_SET(socketdescriptor,&rmask);
+			wmask = rmask;
+			result = select(socketdescriptor + 1, &rmask, &wmask, NULL, &tv);
+			if (result == 0) {
+				//timeout happened
+				throw TCPSocketException(TCPSocketException::Timeout);
+			} else {
+				//connected
+				status = TCPSocketConnected;
+				//reset flag
+				if (fcntl(socketdescriptor, F_SETFL, flag) < 0) {
+					throw TCPSocketException(TCPSocketException::ConnectExceptionWhenChangingSocketModeToBlocking);
 				}
-//			}else{
-//				std::cout << result << std::endl;
-//				throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult);
-//			}
+				return;
+			}
+			//			}else{
+			//				std::cout << result << std::endl;
+			//				throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult);
+			//			}
 		} else {
 			throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionImmediateluSucceeded);
 		}
@@ -433,4 +437,4 @@ public:
 };
 
 }
-#endif /* TCPSOCKET_HH_ */
+#endif /* CXXUTILITIES_TCPSOCKET_HH_ */

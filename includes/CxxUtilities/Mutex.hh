@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef MUTEX_HH_
-#define MUTEX_HH_
+#ifndef CXXUTILITIES_MUTEX_HH_
+#define CXXUTILITIES_MUTEX_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Exception.hh"
@@ -75,4 +75,4 @@ public:
 };
 
 }
-#endif /* MUTEX_HH_ */
+#endif /* CXXUTILITIES_MUTEX_HH_ */

@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef BITSET_HH_
-#define BITSET_HH_
+#ifndef CXXUTILITIES_BITSET_HH_
+#define CXXUTILITIES_BITSET_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 
@@ -63,4 +63,4 @@ public:
 };
 }
 
-#endif /* BITSET_HH_ */
+#endif /* CXXUTILITIES_BITSET_HH_ */

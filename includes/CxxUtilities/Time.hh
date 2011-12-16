@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef TIME_HH_
-#define TIME_HH_
+#ifndef CXXUTILITIES_TIME_HH_
+#define CXXUTILITIES_TIME_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 
@@ -29,4 +29,4 @@ public:
 	}
 };
 }
-#endif /* TIME_HH_ */
+#endif /* CXXUTILITIES_TIME_HH_ */

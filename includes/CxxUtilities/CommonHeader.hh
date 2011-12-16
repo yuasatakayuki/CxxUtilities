@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef COMMONHEADER_HH_
-#define COMMONHEADER_HH_
+#ifndef CXXUTILITIES_COMMONHEADER_HH_
+#define CXXUTILITIES_COMMONHEADER_HH_
 
 #include <iostream>
 #include <string>
@@ -41,4 +41,4 @@
 
 
 
-#endif /* COMMONHEADER_HH_ */
+#endif /* CXXUTILITIES_COMMONHEADER_HH_ */

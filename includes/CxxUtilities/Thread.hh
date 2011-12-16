@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef THREAD_HH_
-#define THREAD_HH_
+#ifndef CXXUTILITIES_THREAD_HH_
+#define CXXUTILITIES_THREAD_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Condition.hh"
@@ -107,4 +107,4 @@ public:
 };
 
 }
-#endif /* THREAD_HH_ */
+#endif /* CXXUTILITIES_THREAD_HH_ */

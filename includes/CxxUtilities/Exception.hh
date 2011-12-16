@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef EXCEPTION_HH_
-#define EXCEPTION_HH_
+#ifndef CXXUTILITIES_EXCEPTION_HH_
+#define CXXUTILITIES_EXCEPTION_HH_
 
 #include "ClassInformation.hh"
 
@@ -53,4 +53,4 @@ public:
 
 };
 }
-#endif /* EXCEPTION_HH_ */
+#endif /* CXXUTILITIES_EXCEPTION_HH_ */

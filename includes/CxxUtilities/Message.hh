@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef MESSAGE_HH_
-#define MESSAGE_HH_
+#ifndef CXXUTILITIES_MESSAGE_HH_
+#define CXXUTILITIES_MESSAGE_HH_
 
 #include "CxxUtilities/Exception.hh"
 #include "CxxUtilities/Mutex.hh"
@@ -102,4 +102,4 @@ private:
 };
 
 }
-#endif /* MESSAGE_HH_ */
+#endif /* CXXUTILITIES_MESSAGE_HH_ */

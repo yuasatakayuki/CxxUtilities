@@ -1,5 +1,7 @@
 
-TARGETS = test_String_toUInt8Array
+TARGETS = \
+test_String_toUInt8Array \
+test_TCPClientSocket
 
 CXXFLAGS = -I$(CXXUTILITIES_PATH)/includes
 

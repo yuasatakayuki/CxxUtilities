@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef CONDITION_HH_
-#define CONDITION_HH_
+#ifndef CXXUTILITIES_CONDITION_HH_
+#define CXXUTILITIES_CONDITION_HH_
 
 #include "CxxUtilities/Exception.hh"
 #include "CxxUtilities/Mutex.hh"
@@ -131,4 +131,4 @@ public:
 };
 
 }
-#endif /* CONDITION_HH_ */
+#endif /* CXXUTILITIES_CONDITION_HH_ */

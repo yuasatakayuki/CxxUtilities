@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef ARRAY_HH_
-#define ARRAY_HH_
+#ifndef CXXUTILITIES_ARRAY_HH_
+#define CXXUTILITIES_ARRAY_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 
@@ -122,4 +122,4 @@ public:
 };
 
 }
-#endif /* ARRAY_HH_ */
+#endif /* CXXUTILITIES_ARRAY_HH_ */

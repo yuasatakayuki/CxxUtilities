@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef STRING_HH_
-#define STRING_HH_
+#ifndef CXXUTILITIES_STRING_HH_
+#define CXXUTILITIES_STRING_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 
@@ -37,6 +37,19 @@ public:
 			ss >> avalue;
 		}
 		return avalue;
+	}
+
+	static uint8_t toUInt8(std::string str) {
+		using namespace std;
+		stringstream ss;
+		ss << str;
+		uint32_t avalue;
+		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
+			ss >> hex >> avalue;
+		} else {
+			ss >> avalue;
+		}
+		return (uint8_t)avalue;
 	}
 
 	static uint32_t toUInt32(std::string str) {
@@ -298,4 +311,4 @@ public:
 };
 }
 
-#endif /* STRING_HH_ */
+#endif /* CXXUTILITIES_STRING_HH_ */

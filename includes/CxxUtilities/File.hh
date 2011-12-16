@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef FILE_HH_
-#define FILE_HH_
+#ifndef CXXUTILITIES_FILE_HH_
+#define CXXUTILITIES_FILE_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Exception.hh"
@@ -161,4 +161,4 @@ public:
 };
 
 }
-#endif /* FILE_HH_ */
+#endif /* CXXUTILITIES_FILE_HH_ */
