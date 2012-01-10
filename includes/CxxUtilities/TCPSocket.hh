@@ -35,17 +35,80 @@ public:
 		OpenException,
 		CreateException,
 		HostEntryError,
-		ConnectException,
+		ConnectFailed,
 		ConnectExceptionWhenChangingSocketModeToNonBlocking,
+		ConnectExceptionWhenWaitingForConnection,
 		ConnectExceptionNonBlockingConnectionImmediateluSucceeded,
 		ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult,
 		ConnectExceptionWhenChangingSocketModeToBlocking,
-		Undefied
+		Undefined
 	};
 
 public:
 	TCPSocketException(uint32_t status) :
 		CxxUtilities::Exception(status) {
+	}
+
+public:
+	std::string toString() {
+		std::string result;
+		switch (status) {
+		case Disconnected:
+			result = "Disconnected";
+			break;
+		case Timeout:
+			result = "Timeout";
+			break;
+		case TCPSocketError:
+			result = "TCPSocketError";
+			break;
+		case PortNumberError:
+			result = "PortNumberError";
+			break;
+		case BindError:
+			result = "BindError";
+			break;
+		case ListenError:
+			result = "ListenError";
+			break;
+		case AcceptException:
+			result = "AcceptException";
+			break;
+		case OpenException:
+			result = "OpenException";
+			break;
+		case CreateException:
+			result = "CreateException";
+			break;
+		case HostEntryError:
+			result = "HostEntryError";
+			break;
+		case ConnectFailed:
+			result = "ConnectFailed";
+			break;
+		case ConnectExceptionWhenChangingSocketModeToNonBlocking:
+			result = "ConnectExceptionWhenChangingSocketModeToNonBlocking";
+			break;
+		case ConnectExceptionWhenWaitingForConnection:
+			result = "ConnectExceptionWhenWaitingForConnection";
+			break;
+		case ConnectExceptionNonBlockingConnectionImmediateluSucceeded:
+			result = "ConnectExceptionNonBlockingConnectionImmediateluSucceeded";
+			break;
+		case ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult:
+			result = "ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult";
+			break;
+		case ConnectExceptionWhenChangingSocketModeToBlocking:
+			result = "ConnectExceptionWhenChangingSocketModeToBlocking";
+			break;
+		case Undefined:
+			result = "Undefined";
+			break;
+		default:
+			result = "Undefined status";
+			break;
+		}
+		return result;
 	}
 };
 
@@ -74,7 +137,7 @@ public:
 	}
 
 	~TCPSocket() {
-		
+
 	}
 
 	int getStatus() {
@@ -102,6 +165,7 @@ public:
 		long result = ::recv(socketdescriptor, data, length, 0);
 		if (result <= 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK) {
+				//todo
 				throw TCPSocketException(TCPSocketException::Timeout);
 			} else {
 				std::string err;
@@ -156,7 +220,11 @@ public:
 			timeoutDurationInMilliSec = durationInMilliSec;
 			struct timeval tv;
 			tv.tv_sec = (unsigned int) (floor(durationInMilliSec / 1000.));
-			tv.tv_usec = (int) ((durationInMilliSec - floor(durationInMilliSec)) * 1000);
+			if(durationInMilliSec>floor(durationInMilliSec)){
+				tv.tv_usec = (int) ((durationInMilliSec - floor(durationInMilliSec)) * 1000);
+			}else{
+				tv.tv_usec = (int) (durationInMilliSec * 1000);
+			}
 			setsockopt(socketdescriptor, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof tv);
 		}
 	}
@@ -401,31 +469,40 @@ public:
 		result = ::connect(socketdescriptor, (struct ::sockaddr*) &serveraddress, sizeof(struct ::sockaddr_in));
 
 		if (result < 0) {
-			//if(result==EINPROGRESS){
-			struct timeval tv;
-			tv.tv_sec = (unsigned int) (floor(timeoutDurationInMilliSec / 1000.));
-			tv.tv_usec = (int) ((timeoutDurationInMilliSec - floor(timeoutDurationInMilliSec)) * 1000);
-			fd_set rmask, wmask;
-			FD_ZERO(&rmask);
-			FD_SET(socketdescriptor,&rmask);
-			wmask = rmask;
-			result = select(socketdescriptor + 1, &rmask, &wmask, NULL, &tv);
-			if (result == 0) {
-				//timeout happened
-				throw TCPSocketException(TCPSocketException::Timeout);
-			} else {
-				//connected
-				status = TCPSocketConnected;
-				//reset flag
-				if (fcntl(socketdescriptor, F_SETFL, flag) < 0) {
-					throw TCPSocketException(TCPSocketException::ConnectExceptionWhenChangingSocketModeToBlocking);
+			if (errno == EINPROGRESS) {
+				struct timeval tv;
+				tv.tv_sec = (unsigned int) (floor(timeoutDurationInMilliSec / 1000.));
+				tv.tv_usec = (int) ((timeoutDurationInMilliSec - floor(timeoutDurationInMilliSec)) * 1000);
+				fd_set rmask, wmask;
+				FD_ZERO(&rmask);
+				FD_ZERO(&wmask);
+				FD_SET(socketdescriptor,&wmask);
+				result = select(socketdescriptor + 1, NULL, &wmask, NULL, &tv);
+				if (result < 0) {
+					throw TCPSocketException(TCPSocketException::ConnectExceptionWhenWaitingForConnection);
+				} else if (result == 0) {
+					//timeout happened
+					throw TCPSocketException(TCPSocketException::Timeout);
+				} else {
+					struct sockaddr_in name;
+					socklen_t len = sizeof(name);
+					if (getpeername(socketdescriptor, (struct sockaddr*) &name, &len) >= 0) {
+						//connected
+						status = TCPSocketConnected;
+						//reset flag
+						if (fcntl(socketdescriptor, F_SETFL, flag) < 0) {
+							throw TCPSocketException(
+									TCPSocketException::ConnectExceptionWhenChangingSocketModeToBlocking);
+						}
+						return;
+					} else {
+						throw TCPSocketException(TCPSocketException::ConnectFailed);
+					}
 				}
-				return;
+			} else {
+				throw TCPSocketException(
+						TCPSocketException::ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult);
 			}
-			//			}else{
-			//				std::cout << result << std::endl;
-			//				throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult);
-			//			}
 		} else {
 			throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionImmediateluSucceeded);
 		}

@@ -30,10 +30,11 @@ public:
 		using namespace std;
 		stringstream ss;
 		ss << str;
-		int avalue;
+		int avalue = 0;
 		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
 			ss >> hex >> avalue;
 		} else {
+			cout << str << endl;
 			ss >> avalue;
 		}
 		return avalue;
@@ -43,20 +44,20 @@ public:
 		using namespace std;
 		stringstream ss;
 		ss << str;
-		uint32_t avalue;
+		uint32_t avalue = 0;
 		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
 			ss >> hex >> avalue;
 		} else {
 			ss >> avalue;
 		}
-		return (uint8_t)avalue;
+		return (uint8_t) avalue;
 	}
 
 	static uint32_t toUInt32(std::string str) {
 		using namespace std;
 		stringstream ss;
 		ss << str;
-		uint32_t avalue;
+		uint32_t avalue = 0;
 		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
 			ss >> hex >> avalue;
 		} else {
@@ -69,7 +70,7 @@ public:
 		using namespace std;
 		stringstream ss;
 		ss << str;
-		uint64_t avalue;
+		uint64_t avalue = 0;
 		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
 			ss >> hex >> avalue;
 		} else {
@@ -101,22 +102,36 @@ public:
 	static std::vector<unsigned char> toUnsignedCharArray(std::string str) {
 		using namespace std;
 		vector<unsigned char> result;
+		str=String::replace(str,"\n","");
+		str=String::replace(str,"\r","");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
-			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1] == 'X')) {
-				uint32_t avalue=0;
-				size_t o = 2;
-				while (o < stringArray[i].size()) {
+			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
+					== 'X')) {
+				string element = String::replace(String::toLowerCase(stringArray[i]), "0x", "");
+				size_t elementLength = element.size();
+				uint32_t avalue = 0;
+				size_t o = 0;
+				bool firstByte = true;
+
+				while (o < element.size()) {
 					std::stringstream ss;
-					if (o + 1 == stringArray[i].size()) {//read one character
-						ss << "0x" << stringArray[i].substr(o,1);
-						o++;
-					} else {//read two characters
-						ss << "0x" << stringArray[i].substr(o,2);
-						o+=2;
+					if (firstByte) {
+						if (elementLength % 2 == 0) {//even number
+							ss << "0x" << element.substr(o, 2);
+							o += 2;
+						} else {//odd number
+							ss << "0x" << element.substr(o, 1);
+							o++;
+						}
+						firstByte = false;
+					} else {
+						//read two characters
+						ss << "0x" << element.substr(o, 2);
+						o += 2;
 					}
 					ss >> hex >> avalue;
-					result.push_back((unsigned char)avalue);
+					result.push_back((uint8_t) avalue);
 				}
 			} else {
 				unsigned char avalue = (unsigned char) String::toUInt32(stringArray[i]);
@@ -129,22 +144,36 @@ public:
 	static std::vector<uint8_t> toUInt8Array(std::string str) {
 		using namespace std;
 		vector<unsigned char> result;
+		str=String::replace(str,"\n","");
+		str=String::replace(str,"\r","");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
-			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1] == 'X')) {
-				uint32_t avalue=0;
-				size_t o = 2;
-				while (o < stringArray[i].size()) {
+			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
+					== 'X')) {
+				string element = String::replace(String::toLowerCase(stringArray[i]), "0x", "");
+				size_t elementLength = element.size();
+				uint32_t avalue = 0;
+				size_t o = 0;
+				bool firstByte = true;
+
+				while (o < element.size()) {
 					std::stringstream ss;
-					if (o + 1 == stringArray[i].size()) {//read one character
-						ss << "0x" << stringArray[i].substr(o,1);
-						o++;
-					} else {//read two characters
-						ss << "0x" << stringArray[i].substr(o,2);
-						o+=2;
+					if (firstByte) {
+						if (elementLength % 2 == 0) {//even number
+							ss << "0x" << element.substr(o, 2);
+							o += 2;
+						} else {//odd number
+							ss << "0x" << element.substr(o, 1);
+							o++;
+						}
+						firstByte = false;
+					} else {
+						//read two characters
+						ss << "0x" << element.substr(o, 2);
+						o += 2;
 					}
 					ss >> hex >> avalue;
-					result.push_back((uint8_t)avalue);
+					result.push_back((uint8_t) avalue);
 				}
 			} else {
 				uint8_t uint8_value = (uint8_t) String::toUInt32(stringArray[i]);
@@ -166,14 +195,14 @@ public:
 		using namespace std;
 		stringstream ss;
 		ss << str;
-		double avalue;
+		double avalue = 0;
 		ss >> avalue;
 		return avalue;
 	}
 
 	static std::vector<std::string> split(std::string str, std::string delimitter) {
 		std::vector<std::string> result;
-		size_t n;
+		size_t n = 0;
 		for (size_t i = 0; i <= str.length(); i = n + 1) {
 			n = str.find_first_of(delimitter, i);
 			if (n == std::string::npos) {
@@ -308,6 +337,19 @@ public:
 		}
 	}
 
+public:
+	static std::string put0xForAllElements(std::string str) {
+		using namespace std;
+		vector<string> array = String::split(str, " ");
+		for (size_t i = 0; i < array.size(); i++) {
+			string element = array[i];
+			if (element[0] != '0' || !(element[1] == 'x' || element[1] == 'X')) {
+				element = String::replace(element, " ", "");
+				array[i] = "0x" + element;
+			}
+		}
+		return String::join(array, " ");
+	}
 };
 }
 

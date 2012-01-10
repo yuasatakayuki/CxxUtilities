@@ -97,8 +97,12 @@ public:
 		stopped=true;
 	}
 
+	/** Stops thread. This method executes notify() to interrupt
+	 * sleep() used in the running thread.
+	 */
 	void stop(){
 		stopped=true;
+		notify();
 	}
 
 	bool isStopped(){
