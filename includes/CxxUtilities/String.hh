@@ -102,8 +102,8 @@ public:
 	static std::vector<unsigned char> toUnsignedCharArray(std::string str) {
 		using namespace std;
 		vector<unsigned char> result;
-		str=String::replace(str,"\n","");
-		str=String::replace(str,"\r","");
+		str = String::replace(str, "\n", "");
+		str = String::replace(str, "\r", "");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
 			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
@@ -144,8 +144,8 @@ public:
 	static std::vector<uint8_t> toUInt8Array(std::string str) {
 		using namespace std;
 		vector<unsigned char> result;
-		str=String::replace(str,"\n","");
-		str=String::replace(str,"\r","");
+		str = String::replace(str, "\n", "");
+		str = String::replace(str, "\r", "");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
 			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
@@ -212,6 +212,19 @@ public:
 			if (element != "") {
 				result.push_back(element);
 			}
+		}
+		return result;
+	}
+
+	static std::vector<std::string> splitIntoLines(std::string str) {
+		using namespace std;
+		stringstream ss;
+		std::vector<std::string> result;
+		ss << str;
+		while (!ss.eof()) {
+			string line;
+			getline(ss, line);
+			result.push_back(line);
 		}
 		return result;
 	}
