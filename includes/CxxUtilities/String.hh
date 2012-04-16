@@ -252,7 +252,7 @@ public:
 		return ss.str();
 	}
 
-	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, size_t from, size_t to) {
+	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, int from, int to) {
 		std::vector<std::string> newlist;
 		size_t size = list.size();
 		if (from < 0) {
