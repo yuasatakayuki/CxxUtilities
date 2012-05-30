@@ -8,6 +8,14 @@
 #ifndef CXXUTILITIES_MUTEX_HH_
 #define CXXUTILITIES_MUTEX_HH_
 
+#ifndef _PTHREAD_H
+#include <pthread.h>
+#endif
+
+#ifndef _USER_SIGNAL_H
+#include <signal.h>
+#endif
+
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Exception.hh"
 

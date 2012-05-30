@@ -8,6 +8,14 @@
 #ifndef CXXUTILITIES_THREAD_HH_
 #define CXXUTILITIES_THREAD_HH_
 
+#ifndef _PTHREAD_H
+#include <pthread.h>
+#endif
+
+#ifndef _USER_SIGNAL_H
+#include <signal.h>
+#endif
+
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Condition.hh"
 

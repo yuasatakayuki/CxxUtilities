@@ -8,6 +8,14 @@
 #ifndef CXXUTILITIES_CONDITION_HH_
 #define CXXUTILITIES_CONDITION_HH_
 
+#ifndef _PTHREAD_H
+#include <pthread.h>
+#endif
+
+#ifndef _USER_SIGNAL_H
+#include <signal.h>
+#endif
+
 #include "CxxUtilities/Exception.hh"
 #include "CxxUtilities/Mutex.hh"
 #include <sys/time.h>
