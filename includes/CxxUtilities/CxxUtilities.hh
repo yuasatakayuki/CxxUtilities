@@ -8,6 +8,10 @@
 #ifndef CXXUTILITIES_HH_
 #define CXXUTILITIES_HH_
 
+#ifndef uint8_t
+#include <stdint.h>
+#endif
+
 #include "CxxUtilities/CommonHeader.hh"
 #include "CxxUtilities/Exception.hh"
 #include "CxxUtilities/String.hh"
