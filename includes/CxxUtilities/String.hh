@@ -242,7 +242,7 @@ public:
 	static std::string join(std::vector<std::string> list, std::string conjunction) {
 		std::stringstream ss;
 		size_t size = list.size();
-		for (int i = 0; i < size; i++) {
+		for (unsigned int i = 0; i < size; i++) {
 			if (i == size - 1) {
 				ss << list[i];
 			} else {
