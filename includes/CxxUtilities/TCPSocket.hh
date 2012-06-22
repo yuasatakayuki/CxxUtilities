@@ -249,6 +249,8 @@ private:
 public:
 	TCPServerAcceptedSocket() :
 			TCPSocket() {
+		int n = 1;
+		::setsockopt(this->socketdescriptor, SOL_SOCKET, SO_NOSIGPIPE, &n, sizeof(n));
 	}
 
 	~TCPServerAcceptedSocket() {
@@ -301,6 +303,8 @@ public:
 		create();
 		bind();
 		listen();
+		int n = 1;
+		::setsockopt(this->socketdescriptor, SOL_SOCKET, SO_NOSIGPIPE, &n, sizeof(n));
 	}
 
 	void close() {
@@ -463,6 +467,8 @@ public:
 		setURL(url);
 		setPort(port);
 		open(timeoutDurationInMilliSec);
+		int n = 1;
+		::setsockopt(this->socketdescriptor, SOL_SOCKET, SO_NOSIGPIPE, &n, sizeof(n));
 	}
 
 	void close() {
