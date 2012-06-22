@@ -241,7 +241,7 @@ public:
 	static std::string join(std::vector<std::string> list, std::string conjunction) {
 		std::stringstream ss;
 		size_t size = list.size();
-		for (int i = 0; i < size; i++) {
+		for (unsigned int i = 0; i < size; i++) {
 			if (i == size - 1) {
 				ss << list[i];
 			} else {
@@ -263,15 +263,15 @@ public:
 		if (from < 0 || to < 0) {
 			return newlist;
 		}
-		if (size <= from || size <= to) {
+		if (size <= (unsigned int)from || size <= (unsigned int)to) {
 			return newlist;
 		}
 		if (from <= to) {
-			for (size_t i = from; i <= to; i++) {
+			for (size_t i = (unsigned int)from; i <= (unsigned int)to; i++) {
 				newlist.push_back(list[i]);
 			}
 		} else {
-			for (size_t i = to; i <= from; i++) {
+			for (size_t i = (unsigned int)to; i <= (unsigned int)from; i++) {
 				newlist.push_back(list[i]);
 			}
 		}
