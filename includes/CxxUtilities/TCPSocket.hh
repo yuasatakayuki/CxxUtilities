@@ -46,7 +46,7 @@ public:
 
 public:
 	TCPSocketException(uint32_t status) :
-		CxxUtilities::Exception(status) {
+			CxxUtilities::Exception(status) {
 	}
 
 public:
@@ -169,29 +169,29 @@ public:
 				throw TCPSocketException(TCPSocketException::Timeout);
 			} else {
 				std::string err;
-				switch (errno) {
-				case EBADF:
+				switch(errno) {
+					case EBADF:
 					err = "EBADF";
 					break;
-				case ECONNREFUSED:
+					case ECONNREFUSED:
 					err = "ECONNREFUSED";
 					break;
-				case EFAULT:
+					case EFAULT:
 					err = "EFAULT";
 					break;
-				case EINTR:
+					case EINTR:
 					err = "EINTR";
 					break;
-				case EINVAL:
+					case EINVAL:
 					err = "EINVAL";
 					break;
-				case ENOMEM:
+					case ENOMEM:
 					err = "ENOMEM";
 					break;
-				case ENOTCONN:
+					case ENOTCONN:
 					err = "ENOTCONN";
 					break;
-				case ENOTSOCK:
+					case ENOTSOCK:
 					err = "ENOTSOCK";
 					break;
 				}
@@ -220,9 +220,9 @@ public:
 			timeoutDurationInMilliSec = durationInMilliSec;
 			struct timeval tv;
 			tv.tv_sec = (unsigned int) (floor(durationInMilliSec / 1000.));
-			if(durationInMilliSec>floor(durationInMilliSec)){
+			if (durationInMilliSec > floor(durationInMilliSec)) {
 				tv.tv_usec = (int) ((durationInMilliSec - floor(durationInMilliSec)) * 1000);
-			}else{
+			} else {
 				tv.tv_usec = (int) (durationInMilliSec * 1000);
 			}
 			setsockopt(socketdescriptor, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof tv);
@@ -248,7 +248,7 @@ private:
 
 public:
 	TCPServerAcceptedSocket() :
-		TCPSocket() {
+			TCPSocket() {
 	}
 
 	~TCPServerAcceptedSocket() {
@@ -287,7 +287,7 @@ private:
 
 public:
 	TCPServerSocket(int portNumber) :
-		TCPSocket() {
+			TCPSocket() {
 		setPort(portNumber);
 	}
 
@@ -365,10 +365,65 @@ public:
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::AcceptException);
 		} else {
+			int acceptedSocketDescriptor = result;
 			TCPServerAcceptedSocket* acceptedsocket = new TCPServerAcceptedSocket();
 			acceptedsocket->setAddress(&clientaddress);
 			acceptedsocket->setPort(getPort());
 			acceptedsocket->setSocketDescriptor(result);
+			/*
+			 int option = 1;
+			 ::setsockopt(acceptedSocketDescriptor, SOL_SOCKET, SO_KEEPALIVE, (void*) &option, sizeof(option));
+			 option = 1;
+			 setsockopt(acceptedSocketDescriptor, IPPROTO_TCP, TCP_KEEPIDLE, (void*) &option, sizeof(option));
+			 option = 1;
+			 setsockopt(acceptedSocketDescriptor, IPPROTO_TCP, TCP_KEEPINTVL, (void*) &option, sizeof(option));
+			 option = 3;
+			 setsockopt(acceptedSocketDescriptor, IPPROTO_TCP, TCP_KEEPCNT, (void*) &option, sizeof(option));
+			 */
+			return acceptedsocket;
+		}
+	}
+
+	TCPServerAcceptedSocket* accept(double timeoutDurationInMilliSec) throw (TCPSocketException) {
+		fd_set mask;
+		FD_ZERO(&mask);
+		FD_SET(socketdescriptor, &mask);
+		struct timeval tv;
+		tv.tv_sec = (unsigned int) (floor(timeoutDurationInMilliSec / 1000.));
+		tv.tv_usec = (int)(timeoutDurationInMilliSec*1000 /* us */ - ((int)((timeoutDurationInMilliSec*1000))/10000));
+		using namespace std;
+		int result = select(socketdescriptor + 1, &mask, NULL, NULL, &tv);
+		if (result < 0) {
+			throw TCPSocketException(TCPSocketException::AcceptException);
+		}
+		if (result == 0) {
+			throw TCPSocketException(TCPSocketException::Timeout);
+		}
+
+		struct ::sockaddr_in clientaddress;
+		int acceptedSocketDescriptor = result;
+
+		int length = sizeof(clientaddress);
+		result = 0;
+		result = ::accept(socketdescriptor, (struct ::sockaddr*) &clientaddress, (::socklen_t*) &length);
+
+		if (result < 0) {
+			throw TCPSocketException(TCPSocketException::AcceptException);
+		} else {
+			TCPServerAcceptedSocket* acceptedsocket = new TCPServerAcceptedSocket();
+			acceptedsocket->setAddress(&clientaddress);
+			acceptedsocket->setPort(getPort());
+			acceptedsocket->setSocketDescriptor(result);
+			/*
+			 int option = 1;
+			 ::setsockopt(acceptedSocketDescriptor, SOL_SOCKET, SO_KEEPALIVE, (void*) &option, sizeof(option));
+			 option = 1;
+			 setsockopt(acceptedSocketDescriptor, IPPROTO_TCP, TCP_KEEPIDLE, (void*) &option, sizeof(option));
+			 option = 1;
+			 setsockopt(acceptedSocketDescriptor, IPPROTO_TCP, TCP_KEEPINTVL, (void*) &option, sizeof(option));
+			 option = 3;
+			 setsockopt(acceptedSocketDescriptor, IPPROTO_TCP, TCP_KEEPCNT, (void*) &option, sizeof(option));
+			 */
 			return acceptedsocket;
 		}
 	}
@@ -381,13 +436,13 @@ private:
 
 public:
 	TCPClientSocket() :
-		TCPSocket() {
+			TCPSocket() {
 		setURL("");
 		socketdescriptor = NULL;
 	}
 
 	TCPClientSocket(std::string url, int port) :
-		TCPSocket() {
+			TCPSocket() {
 		setURL(url);
 		setPort(port);
 		socketdescriptor = NULL;
@@ -476,7 +531,7 @@ public:
 				fd_set rmask, wmask;
 				FD_ZERO(&rmask);
 				FD_ZERO(&wmask);
-				FD_SET(socketdescriptor,&wmask);
+				FD_SET(socketdescriptor, &wmask);
 				result = select(socketdescriptor + 1, NULL, &wmask, NULL, &tv);
 				if (result < 0) {
 					throw TCPSocketException(TCPSocketException::ConnectExceptionWhenWaitingForConnection);

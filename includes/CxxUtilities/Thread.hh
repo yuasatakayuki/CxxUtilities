@@ -40,10 +40,10 @@ public:
 		threadid = 0;
 	}
 
-	~Thread() {
+	virtual ~Thread() {
 	}
 
-	int start() {
+	virtual int start() {
 		int result = pthread_create(&threadid, NULL, Thread::start_routine, (void*) this);
 		return result;
 	}
@@ -100,6 +100,7 @@ protected:
 class StoppableThread : public CxxUtilities::Thread {
 protected:
 	bool stopped;
+
 public:
 	StoppableThread(){
 		stopped=true;
@@ -113,6 +114,31 @@ public:
 		notify();
 	}
 
+	virtual int start() {
+		int result = pthread_create(&threadid, NULL, StoppableThread::start_routine_stoppable, (void*) this);
+		return result;
+	}
+
+private:
+	static void* start_routine_stoppable(void* arg) {
+		if (arg == 0) {
+			std::cout << "Thread start_routine() returning zero" << std::hex << (uintptr_t) (arg) << std::endl;
+			std::cout.flush();
+			return 0;
+		}
+		StoppableThread* newthread = reinterpret_cast<StoppableThread*> (arg);
+		newthread->run_();
+		pthread_exit(arg);
+		return arg;
+	}
+
+	void run_(){
+		stopped=false;
+		run();
+		stopped=true;
+	}
+
+public:
 	bool isStopped(){
 		return stopped;
 	}

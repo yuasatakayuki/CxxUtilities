@@ -27,8 +27,28 @@ public:
 	enum {
 		MessageIsTooLong,Timeout
 	};
+
 public:
 	MessageException(unsigned int status) : Exception(status){
+	}
+
+	virtual ~MessageException(){}
+
+public:
+	std::string toString(){
+		std::string result;
+		switch(status){
+		case MessageIsTooLong:
+			result="MessageIsTooLong";
+			break;
+		case Timeout:
+			result="Timeout";
+			break;
+		default:
+			result="UndefinedException";
+			break;
+		}
+		return result;
 	}
 };
 

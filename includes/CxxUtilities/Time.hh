@@ -24,6 +24,12 @@ public:
 		return std::string(str);
 	}
 
+	/** Returns the current date/time formatted accordingly.
+	 */
+	static std::string getCurrentTimeYYYYMMDD_HHMM() {
+		return getCurrentTimeAsString("%Y%m%d_%I%M");
+	}
+
 	static time_t getUNIXTime(){
 		return time(0);
 	}

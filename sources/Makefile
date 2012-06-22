@@ -1,12 +1,24 @@
 
 TARGETS = \
 test_String_toUInt8Array \
-test_TCPClientSocket \
-test_TCPServerSocket_packetSink
+test_TCPSocket_receive \
+test_TCPSocket_server_accept_timeout \
+test_Message
+#test_TCPClientSocket \
+#test_TCPServerSocket_packetSink
 
 CXXFLAGS = -I$(CXXUTILITIES_PATH)/includes
 
 all : $(TARGETS)
+
+test_Message : test_Message.o
+	$(CXX) -g $^ -o $@
+
+test_TCPSocket_server_accept_timeout : test_TCPSocket_server_accept_timeout.o
+	$(CXX) -g $^ -o $@
+
+test_TCPSocket_receive : test_TCPSocket_receive.o
+	$(CXX) -g $^ -o $@
 
 test_TCPServerSocket_packetSink : test_TCPServerSocket_packetSink.o
 	$(CXX) -g $^ -o $@

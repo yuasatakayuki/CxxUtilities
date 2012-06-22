@@ -34,7 +34,6 @@ public:
 		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
 			ss >> hex >> avalue;
 		} else {
-			cout << str << endl;
 			ss >> avalue;
 		}
 		return avalue;
