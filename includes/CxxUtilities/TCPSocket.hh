@@ -250,7 +250,9 @@ public:
 	TCPServerAcceptedSocket() :
 			TCPSocket() {
 		int n = 1;
+#ifdef SO_NOSIGPIPE
 		::setsockopt(this->socketdescriptor, SOL_SOCKET, SO_NOSIGPIPE, &n, sizeof(n));
+#endif
 	}
 
 	~TCPServerAcceptedSocket() {
@@ -304,7 +306,9 @@ public:
 		bind();
 		listen();
 		int n = 1;
+#ifdef SO_NOSIGPIPE
 		::setsockopt(this->socketdescriptor, SOL_SOCKET, SO_NOSIGPIPE, &n, sizeof(n));
+#endif
 	}
 
 	void close() {
@@ -468,7 +472,9 @@ public:
 		setPort(port);
 		open(timeoutDurationInMilliSec);
 		int n = 1;
+#ifdef SO_NOSIGPIPE
 		::setsockopt(this->socketdescriptor, SOL_SOCKET, SO_NOSIGPIPE, &n, sizeof(n));
+#endif
 	}
 
 	void close() {

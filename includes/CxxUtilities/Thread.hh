@@ -100,10 +100,12 @@ protected:
 class StoppableThread : public CxxUtilities::Thread {
 protected:
 	bool stopped;
+	bool inRunMethod;
 
 public:
 	StoppableThread(){
 		stopped=true;
+		inRunMethod=false;
 	}
 
 	/** Stops thread. This method executes notify() to interrupt
@@ -134,13 +136,19 @@ private:
 
 	void run_(){
 		stopped=false;
+		inRunMethod=true;
 		run();
+		inRunMethod=false;
 		stopped=true;
 	}
 
 public:
 	bool isStopped(){
 		return stopped;
+	}
+
+	bool isInRunMethod(){
+		return inRunMethod;
 	}
 };
 

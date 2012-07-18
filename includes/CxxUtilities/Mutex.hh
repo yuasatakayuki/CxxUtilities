@@ -82,5 +82,28 @@ public:
 	}
 };
 
+template<typename T>
+class GlobalMutex_ {
+private:
+	static CxxUtilities::Mutex mutex;
+
+public:
+	GlobalMutex_(){}
+
+	~GlobalMutex_(){}
+
+public:
+	static void lock(){
+		mutex.lock();
+	}
+
+	static void unlock(){
+		mutex.unlock();
+	}
+};
+
+template<typename T> CxxUtilities::Mutex GlobalMutex_<T>::mutex;
+typedef GlobalMutex_<int> GlobalMutex;
+
 }
 #endif /* CXXUTILITIES_MUTEX_HH_ */
