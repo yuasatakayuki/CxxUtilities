@@ -30,13 +30,15 @@ public:
 		using namespace std;
 		stringstream ss;
 		ss << str;
-		int avalue = 0;
 		if (str.size() >= 2 && str[0] == '0' && (str[1] == 'X' || str[1] == 'x')) {
+			unsigned int avalue = 0;
 			ss >> hex >> avalue;
+			return avalue;
 		} else {
+			int avalue = 0;
 			ss >> avalue;
+			return avalue;
 		}
-		return avalue;
 	}
 
 	static uint8_t toUInt8(std::string str) {
