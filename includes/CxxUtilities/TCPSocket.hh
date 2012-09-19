@@ -19,6 +19,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <netinet/tcp.h>
 
 namespace CxxUtilities {
 
@@ -162,41 +163,47 @@ public:
 	}
 
 	long receive(void* data, unsigned int length) throw (TCPSocketException) {
-		long result = ::recv(socketdescriptor, data, length, 0);
+		long result = 0;
+		_CxxUtilities_loop_receive: result = ::recv(socketdescriptor, data, length, 0);
 		if (result <= 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK) {
 				//todo
 				throw TCPSocketException(TCPSocketException::Timeout);
 			} else {
 				std::string err;
-				switch(errno) {
-					case EBADF:
+				switch (errno) {
+				case EBADF:
 					err = "EBADF";
 					break;
-					case ECONNREFUSED:
+				case ECONNREFUSED:
 					err = "ECONNREFUSED";
 					break;
-					case EFAULT:
+				case EFAULT:
 					err = "EFAULT";
 					break;
-					case EINTR:
+				case EINTR:
 					err = "EINTR";
 					break;
-					case EINVAL:
+				case EINVAL:
 					err = "EINVAL";
 					break;
-					case ENOMEM:
+				case ENOMEM:
 					err = "ENOMEM";
 					break;
-					case ENOTCONN:
+				case ENOTCONN:
 					err = "ENOTCONN";
 					break;
-					case ENOTSOCK:
+				case ENOTSOCK:
 					err = "ENOTSOCK";
 					break;
 				}
-				usleep(1000000);
-				throw TCPSocketException(TCPSocketException::Disconnected);
+				//temporary fixing 20120809 Takayuki Yuasa for CentOS VM environment
+				if (errno == EINTR) {
+					goto _CxxUtilities_loop_receive;
+				} else {
+					usleep(1000000);
+					throw TCPSocketException(TCPSocketException::Disconnected);
+				}
 			}
 		}
 		return result;
@@ -239,6 +246,12 @@ public:
 
 	std::string getName() {
 		return name;
+	}
+
+public:
+	void setNoDelay() {
+		int flag = 1;
+		int result = setsockopt(socketdescriptor, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
 	}
 };
 
@@ -398,7 +411,8 @@ public:
 		FD_SET(socketdescriptor, &mask);
 		struct timeval tv;
 		tv.tv_sec = (unsigned int) (floor(timeoutDurationInMilliSec / 1000.));
-		tv.tv_usec = (int)(timeoutDurationInMilliSec*1000 /* us */ - ((int)((timeoutDurationInMilliSec*1000))/10000));
+		tv.tv_usec = (int) (timeoutDurationInMilliSec * 1000 /* us */
+		- ((int) ((timeoutDurationInMilliSec * 1000)) / 10000));
 		using namespace std;
 		int result = select(socketdescriptor + 1, &mask, NULL, NULL, &tv);
 		if (result < 0) {
