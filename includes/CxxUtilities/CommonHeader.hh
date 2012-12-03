@@ -17,6 +17,7 @@
 #include <fstream>
 #include <map>
 #include <queue>
+#include <stack>
 #include <list>
 #include <cmath>
 
@@ -27,6 +28,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include <sys/types.h>
 #include <pthread.h>
