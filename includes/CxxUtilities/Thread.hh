@@ -113,7 +113,7 @@ public:
 	 */
 	void stop(){
 		stopped=true;
-		notify();
+		this->notify();
 	}
 
 	virtual int start() {
