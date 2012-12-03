@@ -105,6 +105,7 @@ public:
 		vector<unsigned char> result;
 		str = String::replace(str, "\n", "");
 		str = String::replace(str, "\r", "");
+		str = String::replace(str, "\t", " ");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
 			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
@@ -147,6 +148,7 @@ public:
 		vector<unsigned char> result;
 		str = String::replace(str, "\n", "");
 		str = String::replace(str, "\r", "");
+		str = String::replace(str, "\t", " ");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
 			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
