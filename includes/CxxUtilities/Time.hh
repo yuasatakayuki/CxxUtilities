@@ -9,6 +9,10 @@
 #define CXXUTILITIES_TIME_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 
 namespace CxxUtilities {
 class TimeValues {
@@ -27,7 +31,7 @@ class Time {
 public:
 	/** Returns the current date/time formatted accordingly.
 	 */
-	static std::string getCurrentTimeAsString(std::string format ="%Y-%m-%d %H:%M:%S") {
+	static std::string getCurrentTimeAsString(std::string format = "%Y-%m-%d %H:%M:%S") {
 		time_t timer = time(NULL);
 		struct tm *date;
 		char str[1024];
@@ -42,25 +46,50 @@ public:
 		return getCurrentTimeAsString("%Y%m%d_%H%M");
 	}
 
-	static time_t getUNIXTime(){
+	static std::string getCurrentTimeYYYYMMDD_HHMMSS() {
+		return getCurrentTimeAsString("%Y%m%d_%H%M%S");
+	}
+
+	static time_t getUNIXTime() {
 		return time(0);
 	}
 
-	static TimeValues getCurrentTimeAsNumbers(){
+	static TimeValues getCurrentTimeAsNumbers() {
 		time_t timer = time(NULL);
 		struct tm *date;
 		date = localtime(&timer);
 		TimeValues timeValues;
-		timeValues.year=date->tm_year+1900;
-		timeValues.month=date->tm_mon;
-		timeValues.day=date->tm_mday;
-		timeValues.hour=date->tm_hour;
-		timeValues.min=date->tm_min;
-		timeValues.sec=date->tm_sec;
-		timeValues.msec=0;
-		timeValues.yday=date->tm_yday;
+		timeValues.year = date->tm_year + 1900;
+		timeValues.month = date->tm_mon;
+		timeValues.day = date->tm_mday;
+		timeValues.hour = date->tm_hour;
+		timeValues.min = date->tm_min;
+		timeValues.sec = date->tm_sec;
+		timeValues.msec = 0;
+		timeValues.yday = date->tm_yday;
 		return timeValues;
 	}
+
+public:
+	static double getClockValueInMilliSec() {
+		struct timespec tp;
+		struct timespec ts;
+
+#ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
+		clock_serv_t clockServ;
+		mach_timespec_t machTimespec;
+		host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &clockServ);
+		clock_get_time(clockServ, &machTimespec);
+		mach_port_deallocate(mach_task_self(), clockServ);
+		ts.tv_sec = machTimespec.tv_sec;
+		ts.tv_nsec = machTimespec.tv_nsec;
+#else
+		clock_gettime(CLOCK_REALTIME, &ts);
+#endif
+
+		return (double) ((ts.tv_sec + ts.tv_nsec *1e-9 )*1000);
+	}
 };
+
 }
 #endif /* CXXUTILITIES_TIME_HH_ */
