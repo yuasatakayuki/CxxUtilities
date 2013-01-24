@@ -102,6 +102,9 @@ protected:
 	bool stopped;
 	bool inRunMethod;
 
+private:
+	static const double WaitDurationInMsForWaitUntilRunMethodComplets=100;//ms
+
 public:
 	StoppableThread(){
 		stopped=true;
@@ -147,8 +150,17 @@ public:
 		return stopped;
 	}
 
+public:
 	bool isInRunMethod(){
 		return inRunMethod;
+	}
+
+public:
+	void waitUntilRunMethodComplets(){
+		CxxUtilities::Condition c;
+		while(inRunMethod){
+			c.wait(WaitDurationInMsForWaitUntilRunMethodComplets);
+		}
 	}
 };
 
