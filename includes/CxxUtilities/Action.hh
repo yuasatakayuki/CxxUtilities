@@ -11,20 +11,32 @@
 #include "CxxUtilities/CommonHeader.hh"
 
 namespace CxxUtilities {
+
+template<typename T>
 class Action {
 public:
-	virtual void doAction(void* parentObject) =0;
+	virtual void doAction(T* parentObject) =0;
+
+public:
+	Action(){}
+
+public:
+	virtual ~Action(){}
 };
 
-class Actions : public std::vector<Action*> {
+template<typename T>
+class Actions : public std::vector<Action<T>*> {
 public:
-	virtual void addAction(Action* action){
+	virtual void addAction(Action<T>* action){
 		this->push_back(action);
 	}
 
 public:
-	virtual void removeAction(Action* action){
-		std::vector<Action*> newActions;
+	virtual ~Actions(){}
+
+public:
+	virtual void removeAction(Action<T>* action){
+		std::vector<Action<T>*> newActions;
 		for(size_t i=0;i<this->size();i++){
 			if(this->at(i)!=action){
 				newActions.push_back(this->at(i));
@@ -37,11 +49,12 @@ public:
 	}
 
 public:
-	virtual void doEachAction(void* parentObject){
+	virtual void doEachAction(T* parentObject){
 		for(size_t i=0;i<this->size();i++){
 			this->at(i)->doAction(parentObject);
 		}
 	}
 };
 }
+
 #endif /* CXXUTILITIES_ACTION_HH_ */
