@@ -20,7 +20,7 @@ public:
 	std::string id;
 
 public:
-	Log(std::string id) {
+	Log(std::string& id) {
 		this->id = id;
 	}
 
@@ -74,15 +74,13 @@ public:
 	}
 
 public:
-	static void enableDumpAll(){
-		dumpAll=true;
+	static void enableDumpAll() {
+		dumpAll = true;
 	}
 
-	static void disableDumpAll(){
-		dumpAll=false;
+	static void disableDumpAll() {
+		dumpAll = false;
 	}
-
-
 
 public:
 	static void add(std::string logBookID, std::string line) {
@@ -97,12 +95,17 @@ public:
 		allLogText.push_back(line);
 		allLogLogBookID.push_back(logBookID);
 
-		if(dumpAll){
+		if (dumpAll) {
 			using namespace std;
 			cout << Time::getCurrentTimeAsString() << " " << logBookID << ": " << line << endl;
 		}
 
 		mutex.unlock();
+	}
+
+	static void addWarning(std::string logBookID, std::string line) {
+		line = "Warning: " + line;
+		add(logBookID, line);
 	}
 
 	static Log* getLogBook(std::string logBookID) {
@@ -121,12 +124,12 @@ public:
 			std::map<std::string, Log*>::iterator it = logs.begin();
 			for (; it != logs.end(); it++) {
 				try {
-					it->second->saveToFile(folderName + "/" + it->first+".log");
+					it->second->saveToFile(folderName + "/" + it->first + ".log");
 				} catch (...) {
 					return false;
 				}
 			}
-			saveAllLogToFile(folderName+"/"+"AllLog.text");
+			saveAllLogToFile(folderName + "/" + "AllLog.text");
 			return true;
 		} catch (...) {
 			return false;
@@ -154,7 +157,7 @@ template<typename T> std::vector<std::string> Logger_<T>::allLogText;
 template<typename T> std::vector<std::string> Logger_<T>::allLogLogBookID;
 template<typename T> std::vector<std::string> Logger_<T>::allLogDateTime;
 template<typename T> Mutex Logger_<T>::mutex;
-template<typename T> bool Logger_<T>::dumpAll=false;
+template<typename T> bool Logger_<T>::dumpAll = false;
 
 typedef Logger_<int> Logger;
 
