@@ -104,7 +104,20 @@ public:
 	}
 
 	static void addWarning(std::string logBookID, std::string line) {
-		line = "Warning: " + line;
+		//cyan
+		line = "\x1b[36mWarning: " + line + "\x1b[39m";
+		add(logBookID, line);
+	}
+
+	static void addError(std::string logBookID, std::string line) {
+		//red color
+		line = "\x1b[31mError: " + line + "\x1b[39m";
+		add(logBookID, line);
+	}
+
+	static void addMagenta(std::string logBookID, std::string line) {
+		//magenta color
+		line = "\x1b[35m" + line + "\x1b[39m";
 		add(logBookID, line);
 	}
 
