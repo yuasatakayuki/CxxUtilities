@@ -54,6 +54,10 @@ public:
 		return time(0);
 	}
 
+	static time_t getUNIXTimeAsUInt32() {
+		return (uint32_t)(time(0));
+	}
+
 	static TimeValues getCurrentTimeAsNumbers() {
 		time_t timer = time(NULL);
 		struct tm *date;
