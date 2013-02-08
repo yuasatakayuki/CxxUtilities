@@ -9,6 +9,8 @@
 #define INTERFACES_HH_
 
 #include "CommonHeader.hh"
+#include "CxxUtilities/Condition.hh"
+#include "CxxUtilities/Thread.hh"
 
 namespace CxxUtilities {
 
@@ -44,15 +46,30 @@ class TerminateInterface_ {
 private:
 	static std::vector<TerminateInterface_<int>*> db;
 	static Mutex mutex;
+
+public:
+	class TerminateThread: public CxxUtilities::Thread {
+	private:
+		TerminateInterface_<int>* instance;
+	public:
+		TerminateThread(TerminateInterface_<int>* instance) {
+			this->instance = instance;
+		}
+	public:
+		void run() {
+			instance->terminate();
+		}
+	};
+
 public:
 	TerminateInterface_() {
 		db.push_back(this);
 	}
 	virtual ~TerminateInterface_() {
 		mutex.lock();
-		std::vector<TerminateInterface_<int>*>::iterator it=db.begin();
-		for(;it!=db.begin();it++){
-			if((*it)==this){
+		std::vector<TerminateInterface_<int>*>::iterator it = db.begin();
+		for (; it != db.begin(); it++) {
+			if ((*it) == this) {
 				db.erase(it);
 				break;
 			}
@@ -61,11 +78,17 @@ public:
 	}
 
 public:
-	static void terminateAll(){
-		for(size_t i=0;i<db.size();i++){
-			db[i]->terminate();
+	static void terminateAll() {
+		for (size_t i = 0; i < db.size(); i++) {
+			TerminateThread* thread = new TerminateThread(db[i]);
+			thread->start();
 		}
+		CxxUtilities::Condition c;
+		c.wait(DefaultWaitDurationForTerminateAllInMs);
 	}
+
+public:
+	static const double DefaultWaitDurationForTerminateAllInMs = 1000; //ms
 
 public:
 	virtual void terminate() = 0;
@@ -81,6 +104,5 @@ Mutex TerminateInterface_<T>::mutex;
 typedef TerminateInterface_<int> TerminateInterface;
 
 }
-
 
 #endif /* INTERFACES_HH_ */
