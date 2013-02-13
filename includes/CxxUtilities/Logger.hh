@@ -30,14 +30,17 @@ public:
 		logDateTime.push_back(Time::getCurrentTimeAsString());
 	}
 
+public:
 	size_t getNLines() {
 		return logText.size();
 	}
 
+public:
 	void clear() {
 		logText.clear();
 	}
 
+public:
 	void saveToFile(std::string filename) {
 		using namespace std;
 		ofstream ofs(filename.c_str());
@@ -50,6 +53,7 @@ public:
 		ofs.close();
 	}
 
+public:
 	void saveToFile() {
 		saveToFile(id);
 	}
@@ -64,11 +68,13 @@ private:
 	static std::vector<std::string> allLogDateTime;
 	static Mutex mutex;
 	static bool dumpAll;
+	static bool recordAll;
 
 public:
 	Logger_() {
 	}
 
+public:
 	~Logger_() {
 
 	}
@@ -78,23 +84,39 @@ public:
 		dumpAll = true;
 	}
 
+public:
 	static void disableDumpAll() {
 		dumpAll = false;
 	}
 
 public:
+	static void enableRecordAll() {
+		recordAll = true;
+	}
+
+public:
+	static void disableRecordAll() {
+		recordAll = false;
+	}
+
+public:
 	static void add(std::string logBookID, std::string line) {
 		mutex.lock();
-		std::map<std::string, Log*>::iterator it = logs.find(logBookID);
-		if (it != logs.end()) {
-			it->second->add(line);
-		} else {
-			logs[logBookID] = new Log(logBookID);
-		}
-		allLogDateTime.push_back(Time::getCurrentTimeAsString());
-		allLogText.push_back(line);
-		allLogLogBookID.push_back(logBookID);
 
+		//record
+		if (recordAll) {
+			std::map<std::string, Log*>::iterator it = logs.find(logBookID);
+			if (it != logs.end()) {
+				it->second->add(line);
+			} else {
+				logs[logBookID] = new Log(logBookID);
+			}
+			allLogDateTime.push_back(Time::getCurrentTimeAsString());
+			allLogText.push_back(line);
+			allLogLogBookID.push_back(logBookID);
+		}
+
+		//dump to screen
 		if (dumpAll) {
 			using namespace std;
 			cout << Time::getCurrentTimeAsString() << " " << logBookID << ": " << line << endl;
@@ -103,24 +125,28 @@ public:
 		mutex.unlock();
 	}
 
+public:
 	static void addWarning(std::string logBookID, std::string line) {
 		//cyan
 		line = "\x1b[36mWarning: " + line + "\x1b[39m";
 		add(logBookID, line);
 	}
 
+public:
 	static void addError(std::string logBookID, std::string line) {
 		//red color
 		line = "\x1b[31mError: " + line + "\x1b[39m";
 		add(logBookID, line);
 	}
 
+public:
 	static void addMagenta(std::string logBookID, std::string line) {
 		//magenta color
 		line = "\x1b[35m" + line + "\x1b[39m";
 		add(logBookID, line);
 	}
 
+public:
 	static Log* getLogBook(std::string logBookID) {
 		std::map<std::string, Log*>::iterator it = logs.find(logBookID);
 		if (it != logs.end()) {
@@ -131,6 +157,7 @@ public:
 		}
 	}
 
+public:
 	static bool saveToFolder(std::string folderName) {
 		try {
 			Directory::create("", folderName);
@@ -147,7 +174,8 @@ public:
 		} catch (...) {
 			return false;
 		}
-
+		//should not reach here
+		return false;
 	}
 
 private:
@@ -170,7 +198,8 @@ template<typename T> std::vector<std::string> Logger_<T>::allLogText;
 template<typename T> std::vector<std::string> Logger_<T>::allLogLogBookID;
 template<typename T> std::vector<std::string> Logger_<T>::allLogDateTime;
 template<typename T> Mutex Logger_<T>::mutex;
-template<typename T> bool Logger_<T>::dumpAll = false;
+template<typename T> bool Logger_<T>::dumpAll = true;
+template<typename T> bool Logger_<T>::recordAll = false;
 
 typedef Logger_<int> Logger;
 
