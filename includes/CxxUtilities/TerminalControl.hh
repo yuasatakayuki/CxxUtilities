@@ -14,20 +14,37 @@ namespace CxxUtilities {
 
 class TerminalControl {
 public:
-	static void clearScreen(){
+	static void clearScreen() {
 		printf("\033[2J");
 	}
 
 public:
-	static void moveCursorToXY(uint32_t x,uint32_t y){
-		printf("\033[%d;%dH" ,y,x);
+	static void moveCursorToXY(uint32_t x, uint32_t y) {
+		printf("\033[%d;%dH", y, x);
 	}
 
 public:
+	static void displayInCyan(std::string str) {
+		//cyan
+		str = "\x1b[36m" + str + "\x1b[39m";
+		printf(str.c_str());
+	}
 
+public:
+	static void displayInRed(std::string str) {
+		//red color
+		str = "\x1b[31m" + str + "\x1b[39m";
+		printf(str.c_str());
+	}
+
+public:
+	static void displayInMagenta(std::string str) {
+		//magenta color
+		str = "\x1b[35m" + str + "\x1b[39m";
+		printf(str.c_str());
+	}
 };
 
 }
-
 
 #endif /* TERMINALCONTROL_HH_ */
