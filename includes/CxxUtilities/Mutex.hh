@@ -28,8 +28,12 @@ public:
 	};
 
 public:
-	MutexException(unsigned int status) : Exception(status){
+	MutexException(unsigned int status) :
+			Exception(status) {
 	}
+
+public:
+	virtual ~MutexException(){}
 };
 
 /** A class which provides a wrapper for a condition object used for inter-thread communication.
@@ -39,6 +43,7 @@ class Mutex {
 private:
 	pthread_mutex_t mutex;
 	pthread_mutexattr_t mutex_attr;
+	size_t lockCounter;
 
 public:
 	/** Constructs an instance.
@@ -47,6 +52,7 @@ public:
 		pthread_mutexattr_init(&mutex_attr);
 		pthread_mutexattr_settype(&mutex_attr, PTHREAD_MUTEX_RECURSIVE);
 		pthread_mutex_init(&mutex, &mutex_attr);
+		lockCounter=0;
 	}
 
 	/** Destructor.
@@ -61,17 +67,23 @@ public:
 	 * mutex.
 	 */
 	void lock() throw (MutexException) {
+		using namespace std;
 		if (pthread_mutex_lock(&mutex) != 0) {
+			cerr << "CxxUtilities::Mutex::lock() LockingFailed lockCounter=" << lockCounter << endl;
 			throw MutexException(MutexException::LockFailed);
 		}
+		lockCounter++;
 	}
 
 	/** Unlocks this mutex.
 	 */
 	void unlock() throw (MutexException) {
+		using namespace std;
 		if (pthread_mutex_unlock(&mutex) != 0) {
+			cerr << "CxxUtilities::Mutex::unlock() UnLockingFailed lockCounter=" << lockCounter << endl;
 			throw MutexException(MutexException::UnlockFailed);
 		}
+		lockCounter--;
 	}
 
 	/** Returns pthread_mutex_t object which is internally used by this class.
@@ -88,16 +100,18 @@ private:
 	static CxxUtilities::Mutex mutex;
 
 public:
-	GlobalMutex_(){}
+	GlobalMutex_() {
+	}
 
-	~GlobalMutex_(){}
+	~GlobalMutex_() {
+	}
 
 public:
-	static void lock(){
+	static void lock() {
 		mutex.lock();
 	}
 
-	static void unlock(){
+	static void unlock() {
 		mutex.unlock();
 	}
 };

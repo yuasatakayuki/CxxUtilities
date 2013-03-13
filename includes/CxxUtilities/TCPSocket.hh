@@ -162,9 +162,20 @@ public:
 		return result;
 	}
 
-	long receive(void* data, unsigned int length) throw (TCPSocketException) {
+public:
+	inline long receiveLoopUntilSpecifiedLengthCompletes(void* data, unsigned int length) throw (TCPSocketException) {
+		receive(data,length,true);
+	}
+
+public:
+	long receive(void* data, unsigned int length, bool waitUntilSpecifiedLengthCompletes = false) throw (TCPSocketException) {
 		long result = 0;
-		_CxxUtilities_loop_receive: result = ::recv(socketdescriptor, data, length, 0);
+		int remainingLength=length;
+		int readDoneLength=0;
+
+		_CxxUtilities_TCPSocket_receive_loop: //
+		result = ::recv(socketdescriptor, ((uint8_t*)data+readDoneLength), remainingLength, 0);
+
 		if (result <= 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK) {
 				//todo
@@ -199,14 +210,24 @@ public:
 				}
 				//temporary fixing 20120809 Takayuki Yuasa for CentOS VM environment
 				if (errno == EINTR) {
-					goto _CxxUtilities_loop_receive;
+					goto _CxxUtilities_TCPSocket_receive_loop;
 				} else {
 					usleep(1000000);
 					throw TCPSocketException(TCPSocketException::Disconnected);
 				}
 			}
 		}
-		return result;
+
+		if (waitUntilSpecifiedLengthCompletes == false) {
+			return result;
+		} else {
+			remainingLength=remainingLength-result;
+			readDoneLength=readDoneLength+result;
+			if(remainingLength==0){
+				return length;
+			}
+			goto _CxxUtilities_TCPSocket_receive_loop;
+		}
 	}
 
 public:

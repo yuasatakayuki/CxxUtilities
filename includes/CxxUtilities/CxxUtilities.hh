@@ -31,4 +31,7 @@
 #include "CxxUtilities/Timer.hh"
 #include "CxxUtilities/TCPSocket.hh"
 
+#include "CxxUtilities/TerminalControl.hh"
+#include "CxxUtilities/Random.hh"
+
 #endif /* CXXUTILITIES_HH_ */
