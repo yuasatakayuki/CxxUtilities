@@ -19,19 +19,20 @@ namespace CxxUtilities {
 template<class T>
 class Array: public std::vector<T> {
 public:
+
 	/** Joins number elements of an array (vector) into a string.
 	 *  @param data array (vector) to be joined.
-	 *  @param dec (for decimal; e.g. 123) or hex (for hexagonal; e.g. 0xAB).
+	 *  @param mode dec (for decimal; e.g. 123) or hex (for hexagonal; e.g. 0xAB).
 	 *  @param maxBytesToBeDumped the maximum number of elements to be actually joined (for long array).
 	 *  @return joined string.
 	 */
-	static std::string toString(std::vector<T>& data, std::string mode = "dec", int maxBytesToBeDumped = 8) {
+	static std::string toString(std::vector<T> data, std::string mode = "dec", int maxBytesToBeDumped = 8) {
 		return toString(&data, mode, maxBytesToBeDumped);
 	}
 
 	/** Joins number elements of an array (vector) into a string.
 	 *  @param data array (vector) to be joined.
-	 *  @param dec (for decimal; e.g. 123) or hex (for hexagonal; e.g. 0xAB).
+	 *  @param mode dec (for decimal; e.g. 123) or hex (for hexagonal; e.g. 0xAB).
 	 *  @param maxBytesToBeDumped the maximum number of elements to be actually joined (for long array).
 	 *  @return joined string.
 	 */
@@ -67,6 +68,47 @@ public:
 		}
 		return ss.str();
 	}
+
+	/** Joins number elements of an array (vector) into a string.
+	 *  @param data array (C-array pointer) to be joined.
+	 *  @param length size of the array.
+	 *  @param mode dec (for decimal; e.g. 123) or hex (for hexagonal; e.g. 0xAB).
+	 *  @param maxBytesToBeDumped the maximum number of elements to be actually joined (for long array).
+	 *  @return joined string.
+	 */
+	static std::string toString(T* data, size_t length, std::string mode = "dec", int maxBytesToBeDumped = 8) {
+		using namespace std;
+		stringstream ss;
+		int maxSize;
+		if (length < maxBytesToBeDumped) {
+			maxSize = length;
+		} else {
+			maxSize = maxBytesToBeDumped;
+		}
+		for (int i = 0; i < maxSize; i++) {
+			if (mode == "dec") {
+				ss << dec << left << data[i];
+			} else if (mode == "hex") {
+				ss << hex << "0x" << setw(2) << setfill('0') << right << (uint32_t)data[i];
+			} else {
+				ss << data[i];
+			}
+			if (i != maxSize - 1) {
+				ss << " ";
+			}
+		}
+		ss << dec;
+		if (maxSize < length) {
+			ss << " ... (total size = " << dec << length;
+			if (length == 1) {
+				ss << " entry)";
+			} else {
+				ss << " entries)";
+			}
+		}
+		return ss.str();
+	}
+
 
 public:
 	/** Splits a string into an array.
