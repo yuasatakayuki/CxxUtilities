@@ -33,5 +33,6 @@
 
 #include "CxxUtilities/TerminalControl.hh"
 #include "CxxUtilities/Random.hh"
+#include "CxxUtilities/Numerical.hh"
 
 #endif /* CXXUTILITIES_HH_ */
