@@ -26,6 +26,12 @@ public:
 		this->x.push_back(x);
 		this->y.push_back(y);
 	}
+
+public:
+	void getLastPoint(double &x, double &y){
+		x=this->x[this->x.size()-1];
+		y=this->y[this->y.size()-1];
+	}
 };
 
 class Integrator {

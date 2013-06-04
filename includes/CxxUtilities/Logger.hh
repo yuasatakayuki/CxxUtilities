@@ -68,7 +68,12 @@ private:
 	static std::vector<std::string> allLogDateTime;
 	static Mutex mutex;
 	static bool dumpAll;
+	static bool dumpToFile;
+	static std::ofstream outputFileStream;
 	static bool recordAll;
+
+	static std::string color;
+	static std::string colorDefault;
 
 public:
 	Logger_() {
@@ -77,6 +82,23 @@ public:
 public:
 	~Logger_() {
 
+	}
+
+public:
+	static void enableDumpToFile(std::string filename) {
+		if (outputFileStream.is_open()) {
+			outputFileStream.close();
+		}
+		outputFileStream.open(filename.c_str());
+		dumpToFile = true;
+	}
+
+public:
+	static void disableDumpToFile() {
+		dumpToFile = false;
+		if (outputFileStream.is_open()) {
+			outputFileStream.close();
+		}
 	}
 
 public:
@@ -100,7 +122,13 @@ public:
 	}
 
 public:
-	static void add(std::string logBookID, std::string line) {
+	enum Color {
+		DefaultColor, Red, Cyan, Magenta
+	};
+
+public:
+	static void add(std::string logBookID, std::string line, Color color=DefaultColor) {
+		using namespace std;
 		mutex.lock();
 
 		//record
@@ -118,8 +146,26 @@ public:
 
 		//dump to screen
 		if (dumpAll) {
-			using namespace std;
-			cout << Time::getCurrentTimeAsString() << " " << logBookID << ": " << line << endl;
+			std::string colorString;
+			switch(color){
+			case Cyan:
+				colorString = "\x1b[36m";//cyan
+				break;
+			case Red:
+				colorString= "\x1b[31m";//red color
+				break;
+			case Magenta:
+				colorString = "\x1b[35m";//magenta color
+				break;
+			default:
+				colorString= colorDefault;
+				break;
+			}
+			cout << Time::getCurrentTimeAsString() << " " << logBookID << ": " << colorString << line << colorDefault << endl;
+		}
+
+		if (dumpToFile) {
+			outputFileStream << Time::getCurrentTimeAsString() << " " << logBookID << ": " << line << endl;
 		}
 
 		mutex.unlock();
@@ -127,23 +173,19 @@ public:
 
 public:
 	static void addWarning(std::string logBookID, std::string line) {
-		//cyan
-		line = "\x1b[36mWarning: " + line + "\x1b[39m";
-		add(logBookID, line);
+		line = "Warning: " + line;
+		add(logBookID, line, Cyan);
 	}
 
 public:
 	static void addError(std::string logBookID, std::string line) {
-		//red color
-		line = "\x1b[31mError: " + line + "\x1b[39m";
-		add(logBookID, line);
+		line = "Error: " + line;
+		add(logBookID, line, Red);
 	}
 
 public:
 	static void addMagenta(std::string logBookID, std::string line) {
-		//magenta color
-		line = "\x1b[35m" + line + "\x1b[39m";
-		add(logBookID, line);
+		add(logBookID, line, Magenta);
 	}
 
 public:
@@ -199,7 +241,12 @@ template<typename T> std::vector<std::string> Logger_<T>::allLogLogBookID;
 template<typename T> std::vector<std::string> Logger_<T>::allLogDateTime;
 template<typename T> Mutex Logger_<T>::mutex;
 template<typename T> bool Logger_<T>::dumpAll = true;
+template<typename T> bool Logger_<T>::dumpToFile = false;
+template<typename T> std::ofstream Logger_<T>::outputFileStream;
 template<typename T> bool Logger_<T>::recordAll = false;
+
+template<typename T> std::string Logger_<T>::color;
+template<typename T> std::string Logger_<T>::colorDefault("\x1b[39m");
 
 typedef Logger_<int> Logger;
 
