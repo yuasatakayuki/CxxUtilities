@@ -366,6 +366,17 @@ public:
 		}
 		return String::join(array, " ");
 	}
+
+public:
+	static std::string removeLeadingSpaces(std::string str){
+		size_t index=0;
+		while(str.at(index)==' ' || str.at(index)=='\t'){
+			index++;
+		}
+		return str.substr(index);
+	}
+
+
 };
 }
 
