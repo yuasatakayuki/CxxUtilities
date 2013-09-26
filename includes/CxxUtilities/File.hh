@@ -110,6 +110,30 @@ public:
 		return result;
 	}
 
+	static std::map<std::string, std::string> readLinesAsMapColonSeparator(std::string filnemae) throw (FileException) {
+		using namespace std;
+		map<string, string> result;
+		vector<string> lines = getAllLines(filnemae);
+		for (unsigned int i = 0; i < lines.size(); i++) {
+			vector<string> array = String::split(lines[i], ":");
+			if (array.size() >= 2) {
+				std::stringstream ss;
+				for(size_t o=1;o<array.size();o++){
+					if(o==1){
+						ss << CxxUtilities::String::removeLeadingSpaces(array[o]);
+					}else{
+						ss << array[o];
+					}
+					if(o!=array.size()-1){
+						ss << " ";
+					}
+				}
+				result[array[0]] = ss.str();
+			}
+		}
+		return result;
+	}
+
 public:
 	/** Returns the current working directory as a string.
 	 */
