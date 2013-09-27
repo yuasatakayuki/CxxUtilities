@@ -1,5 +1,6 @@
 
 TARGETS = \
+test_Env \
 test_TCPSocket_VHDL
 #test_String_toUInt8Array \
 #test_TCPSocket_receive \
@@ -12,6 +13,9 @@ test_TCPSocket_VHDL
 CXXFLAGS = -I$(CXXUTILITIES_PATH)/includes
 
 all : $(TARGETS)
+
+test_Env : test_Env.o
+	$(CXX) -g $^ -o $@
 
 test_TCPSocket_VHDL : test_TCPSocket_VHDL.o
 	$(CXX) -g $^ -o $@

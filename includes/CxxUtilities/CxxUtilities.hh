@@ -35,4 +35,6 @@
 #include "CxxUtilities/Random.hh"
 #include "CxxUtilities/Numerical.hh"
 
+#include "CxxUtilities/Env.hh"
+
 #endif /* CXXUTILITIES_HH_ */
