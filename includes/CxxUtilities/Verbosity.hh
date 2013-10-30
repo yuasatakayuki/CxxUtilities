@@ -22,7 +22,8 @@ public:
 	};
 
 public:
-	static VerbosityLevel level = Quiet;
+	static VerbosityLevel DefaultVerbosityLevel = Middle;
+	static VerbosityLevel level = DefaultVerbosityLevel;
 
 public:
 	static void setVerbosity(VerbosityLevel level_) {
