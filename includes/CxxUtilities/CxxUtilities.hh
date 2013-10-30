@@ -37,4 +37,6 @@
 
 #include "CxxUtilities/Env.hh"
 
+#include "CxxUtilities/Verbosity.hh"
+
 #endif /* CXXUTILITIES_HH_ */
