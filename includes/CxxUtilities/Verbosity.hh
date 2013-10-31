@@ -10,8 +10,8 @@
 
 #include "CommonHeader.hh"
 
-class Verbosity {
-
+template<typename T>
+class _Verbosity {
 public:
 	enum VerbosityLevel {
 		Quiet = 0, //
@@ -22,8 +22,8 @@ public:
 	};
 
 public:
-	static VerbosityLevel DefaultVerbosityLevel = Middle;
-	static VerbosityLevel level = DefaultVerbosityLevel;
+	static int DefaultVerbosityLevel;
+	static int level;
 
 public:
 	static void setVerbosity(VerbosityLevel level_) {
@@ -59,5 +59,10 @@ public:
 	}
 
 };
+
+template<typename T> int _Verbosity<T>::DefaultVerbosityLevel = _Verbosity<T>::Middle;
+template<typename T> int _Verbosity<T>::level = _Verbosity<T>::DefaultVerbosityLevel;
+
+typedef _Verbosity<int> Verbosity;
 
 #endif /* VERBOSITY_HH_ */
