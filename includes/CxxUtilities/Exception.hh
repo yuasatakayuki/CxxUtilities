@@ -20,6 +20,9 @@ public:
 	int status;
 
 public:
+	virtual ~Exception(){}
+
+public:
 	/** Returns status.
 	 * @return status.
 	 */
