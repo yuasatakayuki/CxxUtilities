@@ -41,6 +41,27 @@ public:
 	}
 };
 
+class InstanceNameInterface {
+private:
+	std::string instanceName;
+
+public:
+	InstanceNameInterface(std::string instanceName){
+		this->instanceName=instanceName;
+	}
+
+public:
+	std::string getInstanceName(){
+		return instanceName;
+	}
+
+public:
+	void setInstanceName(std::string instanceName){
+		this->instanceName=instanceName;
+	}
+
+};
+
 template<typename T>
 class TerminateInterface_ {
 private:
