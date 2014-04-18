@@ -103,7 +103,7 @@ protected:
 	bool inRunMethod;
 
 private:
-	static const double WaitDurationInMsForWaitUntilRunMethodComplets=100;//ms
+	constexpr static const double WaitDurationInMsForWaitUntilRunMethodComplets=100;//ms
 
 public:
 	StoppableThread(){

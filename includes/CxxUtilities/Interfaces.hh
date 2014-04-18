@@ -109,7 +109,7 @@ public:
 	}
 
 public:
-	static const double DefaultWaitDurationForTerminateAllInMs = 1000; //ms
+	constexpr static const double DefaultWaitDurationForTerminateAllInMs = 1000; //ms
 
 public:
 	virtual void terminate() = 0;
