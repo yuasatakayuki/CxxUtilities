@@ -10,6 +10,7 @@
 
 #include "CommonHeader.hh"
 
+namespace CxxUtilities {
 template<typename T>
 class _Verbosity {
 public:
@@ -64,5 +65,5 @@ template<typename T> int _Verbosity<T>::DefaultVerbosityLevel = _Verbosity<T>::M
 template<typename T> int _Verbosity<T>::level = _Verbosity<T>::DefaultVerbosityLevel;
 
 typedef _Verbosity<int> Verbosity;
-
+}
 #endif /* VERBOSITY_HH_ */
