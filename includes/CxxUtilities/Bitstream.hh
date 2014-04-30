@@ -8,7 +8,10 @@
 #ifndef BITSTREAM_HH_
 #define BITSTREAM_HH_
 
+#include "Exception.hh"
+
 #include <iostream>
+#include <iomanip>
 #include <vector>
 
 namespace CxxUtilities {
