@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
+#include <CxxUtilities/Exception.hh>
 
 namespace CxxUtilities {
 class BitstreamException: public CxxUtilities::Exception {
