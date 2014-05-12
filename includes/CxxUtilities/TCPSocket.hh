@@ -42,6 +42,7 @@ public:
 		ConnectExceptionNonBlockingConnectionImmediateluSucceeded,
 		ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult,
 		ConnectExceptionWhenChangingSocketModeToBlocking,
+		TimeoutDurationCannotBeSetToDisconnectedSocket,
 		Undefined
 	};
 
@@ -102,6 +103,9 @@ public:
 		case ConnectExceptionWhenChangingSocketModeToBlocking:
 			result = "ConnectExceptionWhenChangingSocketModeToBlocking";
 			break;
+		case TimeoutDurationCannotBeSetToDisconnectedSocket:
+			result = "TimeoutDurationCannotBeSetToDisconnectedSocket";
+			break;
 		case Undefined:
 			result = "Undefined";
 			break;
@@ -113,6 +117,11 @@ public:
 	}
 };
 
+/** A class that provides TCP socket data transfer capability (posix socket wrapper).
+ * Java-like methods are available for opening/closing a server/client TCP socket and
+ * sending/receiving data. Timeout can be enabled to detect disconnection or dysfunctionality
+ * of the opposite side socket.
+ */
 class TCPSocket {
 public:
 	enum {
@@ -154,8 +163,13 @@ public:
 	}
 
 public:
-	long send(void* data, size_t length) throw (TCPSocketException) {
-		long result = ::send(socketdescriptor, data, length, 0);
+	/** Sends data stored in the data buffer for a specified length.
+	 * @param[in] data uint8_t buffer that contains sent data
+	 * @param[in] length data length in bytes
+	 * @return sent size
+	 */
+	size_t send(const uint8_t* data, size_t length) throw (TCPSocketException) {
+		int result = ::send(socketdescriptor, (void*)data, length, 0);
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::TCPSocketError);
 		}
@@ -163,13 +177,25 @@ public:
 	}
 
 public:
-	inline long receiveLoopUntilSpecifiedLengthCompletes(void* data, unsigned int length) throw (TCPSocketException) {
-		receive(data,length,true);
+	/** Receives data until specified length is completely received.
+	 * Received data are stored in the data buffer.
+	 * @param[in] data uint8_t buffer where received data will be stored
+	 * @param[in] length length of data to be received
+	 * @return received size
+	 */
+	inline size_t receiveLoopUntilSpecifiedLengthCompletes(uint8_t* data, uint32_t length) throw (TCPSocketException) {
+		return receive(data,length,true);
 	}
 
 public:
-	long receive(void* data, unsigned int length, bool waitUntilSpecifiedLengthCompletes = false) throw (TCPSocketException) {
-		long result = 0;
+	/** Receives data. The maximum length can be specified as length.
+	 * Receive size may be shorter than the specified length.
+	 * @param[in] data uint8_t buffer where received data will be stored
+	 * @param[in] length the maximum size of the data buffer
+	 * @return received size
+	 */
+	size_t receive(uint8_t* data, uint32_t length, bool waitUntilSpecifiedLengthCompletes = false) throw (TCPSocketException) {
+		size_t result = 0;
 		int remainingLength=length;
 		int readDoneLength=0;
 
@@ -235,14 +261,28 @@ public:
 		this->socketdescriptor = socketdescriptor;
 	}
 
+public:
+	/** Sets TCP/IP port number that this instance will use.
+	 * Port number setting is possible only before opening a connection.
+	 * @param[in] port port number
+	 */
 	void setPort(unsigned short port) {
 		this->port = port;
 	}
 
+public:
+	/** Returns TCP/IP port number that this instance will use.
+	 * @return port number
+	 */
 	int getPort() {
 		return port;
 	}
 
+public:
+	/** Sets time out duration in milli second.
+	 * This method can be called only after a connection is opened.
+	 * @param[in] durationInMilliSec time out duration in ms
+	 */
 	void setTimeout(double durationInMilliSec) {
 		if (socketdescriptor != 0) {
 			timeoutDurationInMilliSec = durationInMilliSec;
@@ -254,33 +294,55 @@ public:
 				tv.tv_usec = (int) (durationInMilliSec * 1000);
 			}
 			setsockopt(socketdescriptor, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof tv);
+		}else{
+			throw TCPSocketException(TCPSocketException::TimeoutDurationCannotBeSetToDisconnectedSocket);
 		}
 	}
 
+public:
+	/** Returns time out duration in ms.
+	 * @return time out duration in ms
+	 */
 	double getTimeoutDuration() {
 		return timeoutDurationInMilliSec;
 	}
 
+public:
+	/** Sets an instance name.
+	 * @param[in] name instance name
+	 */
 	void setName(std::string name) {
 		this->name = name;
 	}
 
+public:
+	/** Returns the name of this instance.
+	 * @return the name of this instance
+	 */
 	std::string getName() {
 		return name;
 	}
 
 public:
+	/** Sets socket option to send bytes without data buffering.
+	 */
 	void setNoDelay() {
 		int flag = 1;
 		int result = setsockopt(socketdescriptor, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
 	}
 };
 
+/** A class that represents a socket which is created by a server
+ * when a new client is connected. This is used to perform multi-client
+ * data transfer with TCPSocket server socket.
+ */
 class TCPServerAcceptedSocket: public TCPSocket {
 private:
 	struct ::sockaddr_in address;
 
 public:
+	/** Constructs an instance.
+	 */
 	TCPServerAcceptedSocket() :
 			TCPSocket() {
 		int n = 1;
@@ -289,13 +351,25 @@ public:
 #endif
 	}
 
+public:
+	/** Destructor.
+	 */
 	~TCPServerAcceptedSocket() {
 	}
 
+public:
+	/** This method cannot be called becasue connections has been
+	 * already established with the parent server socket and the client.
+	 * When invoked, this method will throw an exception TCPSocketException::OpenException.
+	 */
 	void open() throw (TCPSocketException) {
 		throw TCPSocketException(TCPSocketException::OpenException);
 	}
 
+public:
+	/** Clones an instance.
+	 * This method is just for debugging purposes and not for ordinary user application.
+	 */
 	void close() {
 		switch (status) {
 		case TCPSocketCreated:
@@ -310,15 +384,24 @@ public:
 		status = TCPSocketInitialized;
 	}
 
+public:
+	/** Always returns false because this instance cannot be a server socket.
+	 * @rerurn always false
+	 */
 	bool isServerSocket() {
 		return false;
 	}
 
+public:
+	/** Not for ordinary user application.
+	 */
 	void setAddress(struct ::sockaddr_in* address) {
 		memcpy(&address, address, sizeof(struct ::sockaddr_in));
 	}
 };
 
+/** A class that represents a TCP server socket.
+ */
 class TCPServerSocket: public TCPSocket {
 private:
 	static const int maxofconnections = 5;
@@ -481,14 +564,16 @@ public:
 	TCPClientSocket() :
 			TCPSocket() {
 		setURL("");
-		socketdescriptor = NULL;
+		//comment out for suppressing a warning 20140512 Takayuki Yuasa
+		//socketdescriptor = NULL;
 	}
 
 	TCPClientSocket(std::string url, int port) :
 			TCPSocket() {
 		setURL(url);
 		setPort(port);
-		socketdescriptor = NULL;
+		//comment out for suppressing a warning 20140512 Takayuki Yuasa
+		//socketdescriptor = NULL;
 	}
 
 	~TCPClientSocket() {
