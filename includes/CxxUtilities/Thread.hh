@@ -29,7 +29,7 @@ private:
 			std::cout.flush();
 			return 0;
 		}
-		Thread* newthread = reinterpret_cast<Thread*> (arg);
+		Thread* newthread = reinterpret_cast<Thread*>(arg);
 		newthread->run();
 		pthread_exit(arg);
 		return arg;
@@ -97,25 +97,25 @@ protected:
 	Condition condition;
 };
 
-class StoppableThread : public CxxUtilities::Thread {
+class StoppableThread: public CxxUtilities::Thread {
 protected:
 	bool stopped;
 	bool inRunMethod;
 
 private:
-	static const double WaitDurationInMsForWaitUntilRunMethodComplets=100;//ms
+	static constexpr double WaitDurationInMsForWaitUntilRunMethodComplets = 100; //ms
 
 public:
-	StoppableThread(){
-		stopped=true;
-		inRunMethod=false;
+	StoppableThread() {
+		stopped = true;
+		inRunMethod = false;
 	}
 
 	/** Stops thread. This method executes notify() to interrupt
 	 * sleep() used in the running thread.
 	 */
-	void stop(){
-		stopped=true;
+	void stop() {
+		stopped = true;
 		this->notify();
 	}
 
@@ -131,34 +131,34 @@ private:
 			std::cout.flush();
 			return 0;
 		}
-		StoppableThread* newthread = reinterpret_cast<StoppableThread*> (arg);
+		StoppableThread* newthread = reinterpret_cast<StoppableThread*>(arg);
 		newthread->run_();
 		pthread_exit(arg);
 		return arg;
 	}
 
-	void run_(){
-		stopped=false;
-		inRunMethod=true;
+	void run_() {
+		stopped = false;
+		inRunMethod = true;
 		run();
-		inRunMethod=false;
-		stopped=true;
+		inRunMethod = false;
+		stopped = true;
 	}
 
 public:
-	bool isStopped(){
+	bool isStopped() {
 		return stopped;
 	}
 
 public:
-	bool isInRunMethod(){
+	bool isInRunMethod() {
 		return inRunMethod;
 	}
 
 public:
-	void waitUntilRunMethodComplets(){
+	void waitUntilRunMethodComplets() {
 		CxxUtilities::Condition c;
-		while(inRunMethod){
+		while (inRunMethod) {
 			c.wait(WaitDurationInMsForWaitUntilRunMethodComplets);
 		}
 	}
