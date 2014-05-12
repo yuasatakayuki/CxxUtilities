@@ -27,21 +27,21 @@ public:
 	static void displayInCyan(std::string str) {
 		//cyan
 		str = "\x1b[36m" + str + "\x1b[39m";
-		printf(str.c_str());
+		printf("%s",str.c_str());
 	}
 
 public:
 	static void displayInRed(std::string str) {
 		//red color
 		str = "\x1b[31m" + str + "\x1b[39m";
-		printf(str.c_str());
+		printf("%s",str.c_str());
 	}
 
 public:
 	static void displayInMagenta(std::string str) {
 		//magenta color
 		str = "\x1b[35m" + str + "\x1b[39m";
-		printf(str.c_str());
+		printf("%s",str.c_str());
 	}
 };
 
