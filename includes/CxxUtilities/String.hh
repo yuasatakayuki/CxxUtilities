@@ -108,8 +108,8 @@ public:
 		str = String::replace(str, "\t", " ");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
-			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
-					== 'X')) {
+			if (stringArray[i].size() > 2 && stringArray[i][0] == '0'
+					&& (stringArray[i][1] == 'x' || stringArray[i][1] == 'X')) {
 				string element = String::replace(String::toLowerCase(stringArray[i]), "0x", "");
 				size_t elementLength = element.size();
 				uint32_t avalue = 0;
@@ -119,10 +119,10 @@ public:
 				while (o < element.size()) {
 					std::stringstream ss;
 					if (firstByte) {
-						if (elementLength % 2 == 0) {//even number
+						if (elementLength % 2 == 0) { //even number
 							ss << "0x" << element.substr(o, 2);
 							o += 2;
-						} else {//odd number
+						} else { //odd number
 							ss << "0x" << element.substr(o, 1);
 							o++;
 						}
@@ -151,8 +151,8 @@ public:
 		str = String::replace(str, "\t", " ");
 		vector<string> stringArray = String::split(str, " ");
 		for (unsigned int i = 0; i < stringArray.size(); i++) {
-			if (stringArray[i].size() > 2 && stringArray[i][0] == '0' && (stringArray[i][1] == 'x' || stringArray[i][1]
-					== 'X')) {
+			if (stringArray[i].size() > 2 && stringArray[i][0] == '0'
+					&& (stringArray[i][1] == 'x' || stringArray[i][1] == 'X')) {
 				string element = String::replace(String::toLowerCase(stringArray[i]), "0x", "");
 				size_t elementLength = element.size();
 				uint32_t avalue = 0;
@@ -162,10 +162,10 @@ public:
 				while (o < element.size()) {
 					std::stringstream ss;
 					if (firstByte) {
-						if (elementLength % 2 == 0) {//even number
+						if (elementLength % 2 == 0) { //even number
 							ss << "0x" << element.substr(o, 2);
 							o += 2;
-						} else {//odd number
+						} else { //odd number
 							ss << "0x" << element.substr(o, 1);
 							o++;
 						}
@@ -267,15 +267,15 @@ public:
 		if (from < 0 || to < 0) {
 			return newlist;
 		}
-		if (size <= (unsigned int)from || size <= (unsigned int)to) {
+		if (size <= (unsigned int) from || size <= (unsigned int) to) {
 			return newlist;
 		}
 		if (from <= to) {
-			for (size_t i = (unsigned int)from; i <= (unsigned int)to; i++) {
+			for (size_t i = (unsigned int) from; i <= (unsigned int) to; i++) {
 				newlist.push_back(list[i]);
 			}
 		} else {
-			for (size_t i = (unsigned int)to; i <= (unsigned int)from; i++) {
+			for (size_t i = (unsigned int) to; i <= (unsigned int) from; i++) {
 				newlist.push_back(list[i]);
 			}
 		}
@@ -295,26 +295,6 @@ public:
 		} else {
 			return false;
 		}
-	}
-
-	static std::string toLowerCase(std::string str) {
-		using namespace std;
-		for (size_t i = 0; i < str.size(); i++) {
-			if ('A' <= str[i] && str[i] <= 'Z') {
-				str[i] = str[i] - 'A' + 'a';
-			}
-		}
-		return str;
-	}
-
-	static std::string toUpperCase(std::string str) {
-		using namespace std;
-		for (size_t i = 0; i < str.size(); i++) {
-			if ('a' <= str[i] && str[i] <= 'z') {
-				str[i] = str[i] - 'a' + 'A';
-			}
-		}
-		return str;
 	}
 
 	static std::string toStringFromInteger(int avalue) {
@@ -344,6 +324,10 @@ public:
 		}
 	}
 
+	static bool include(std::string str, std::string searched_str) {
+		return includes(str, searched_str);
+	}
+
 	static size_t indexOf(std::string str, std::string searched_str) {
 		size_t result = str.find(searched_str);
 		if (result == std::string::npos) {
@@ -368,14 +352,41 @@ public:
 	}
 
 public:
-	static std::string removeLeadingSpaces(std::string str){
-		size_t index=0;
-		while(str.at(index)==' ' || str.at(index)=='\t'){
+	static std::string removeLeadingSpaces(std::string str) {
+		size_t index = 0;
+		while (str.at(index) == ' ' || str.at(index) == '\t') {
 			index++;
 		}
 		return str.substr(index);
 	}
 
+public:
+	static std::string upCase(std::string str) {
+		std::string result;
+		std::transform(str.begin(), str.end(), std::back_inserter(result), (int (*)(int))std::toupper);return
+result		;
+	}
+
+public:
+	static std::string toUpperCase(std::string str) {
+		std::string result;
+		std::transform(str.begin(), str.end(), std::back_inserter(result), (int (*)(int))std::toupper);
+		return result;
+	}
+
+public:
+	static std::string downCase(std::string str) {
+		std::string result;
+		std::transform(str.begin(), str.end(), std::back_inserter(result), (int (*)(int))std::tolower);
+		return result;
+	}
+
+public:
+	static std::string toLowerCase(std::string str) {
+		std::string result;
+		std::transform(str.begin(), str.end(), std::back_inserter(result), (int (*)(int))std::tolower);
+		return result;
+	}
 
 };
 }
