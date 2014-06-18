@@ -49,7 +49,7 @@ public:
 			if (mode == "dec") {
 				ss << dec << left << data->at(i);
 			} else if (mode == "hex") {
-				ss << hex << "0x" << setw(2) << setfill('0') << right << (uint32_t)data->at(i);
+				ss << hex << "0x" << setw(2) << setfill('0') << right << (uint32_t) data->at(i);
 			} else {
 				ss << data->at(i);
 			}
@@ -89,7 +89,7 @@ public:
 			if (mode == "dec") {
 				ss << dec << left << data[i];
 			} else if (mode == "hex") {
-				ss << hex << "0x" << setw(2) << setfill('0') << right << (uint32_t)data[i];
+				ss << hex << "0x" << setw(2) << setfill('0') << right << (uint32_t) data[i];
 			} else {
 				ss << data[i];
 			}
@@ -108,7 +108,6 @@ public:
 		}
 		return ss.str();
 	}
-
 
 public:
 	/** Splits a string into an array.
@@ -132,13 +131,14 @@ public:
 		return result;
 	}
 
+public:
 	/** Splits a string into an array.
 	 * @param str a string to be split.
 	 * @param delimitter a character or a word used as a delimitter.
 	 * @return pointer to a newly created Array instance.
 	 */
 	static Array<std::string>* newBySplittingString(std::string str, std::string delimitter) {
-		Array<std::string>* result=new Array<std::string>;
+		Array<std::string>* result = new Array<std::string>;
 		int n;
 		for (int i = 0; i <= str.length(); i = n + 1) {
 			n = str.find_first_of(delimitter, i);
@@ -153,6 +153,7 @@ public:
 		return result;
 	}
 
+public:
 	/** Splits a string into an array.
 	 * @param str a string to be split.
 	 * @param delimitter a character or a word used as a delimitter.
@@ -161,6 +162,46 @@ public:
 	static Array<std::string>* arrayBySplittingString(std::string str, std::string delimitter) {
 		return newBySplittingString(str, delimitter);
 	}
+
+public:
+	/** Erase entries that have the specified value.
+	 * @param[in] original vector
+	 * @param[in] value of entries should be deleted
+	 * @return modified vector
+	 */
+	static std::vector<T> deleteEntries(std::vector<T> originalVector, T value) {
+		static std::vector<T> result;
+		for (auto& e : originalVector) {
+			if (e != value) {
+				result.push_back(e);
+			}
+		}
+		return result;
+	}
+
+public:
+	/** Erase entries that have the specified value.
+	 * @param[in] original vector
+	 * @param[in] vector containing values of entries should be deleted
+	 * @return modified vector
+	 */
+	static std::vector<T> deleteEntries(std::vector<T> originalVector, std::vector<T> deletedValues) {
+		static std::vector<T> result;
+		for (auto& e : originalVector) {
+			bool shouldBeDeleted = false;
+			for (auto& deletedValue : deletedValues) {
+				if (e == deletedValues) {
+					shouldBeDeleted = true;
+					break;
+				}
+			}
+			if (!shouldBeDeleted) {
+				result.push_back(e);
+			}
+		}
+		return result;
+	}
+
 };
 
 }
