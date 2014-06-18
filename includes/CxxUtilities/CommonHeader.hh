@@ -20,6 +20,8 @@
 #include <stack>
 #include <list>
 #include <cmath>
+#include <tuple>
+#include <algorithm>
 
 #include <stdlib.h>
 #include <unistd.h>
