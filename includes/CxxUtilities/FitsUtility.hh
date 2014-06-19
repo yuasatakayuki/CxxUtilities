@@ -103,8 +103,7 @@ public:
 		}
 	}
 
-	staic
-	std::string getCfitsioStyleDataTypeNumberAsString(std::string dataTypeName) {
+	static std::string getCfitsioStyleDataTypeNumberAsString(std::string dataTypeName) {
 		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
 		if (CxxUtilities::String::include(dataTypeName, "byte")) {
 			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
