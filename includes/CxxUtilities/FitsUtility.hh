@@ -12,199 +12,202 @@
 
 namespace CxxUtilities {
 
-// DATATYPE               TFORM CODE
-static const int TBIT = 1; //                            'X'
-static const int TBYTE = 11; // 8-bit unsigned byte,       'B'
-static const int TLOGICAL = 14; // logicals (int for keywords and char for table cols   'L'
-static const int TSTRING = 16; // ASCII string,              'A'
-static const int TSHORT = 21; // signed short,              'I'
-static const int TLONG = 41; // signed long,
-static const int TLONGLONG = 81; // 64-bit long signed integer 'K'
-static const int TFLOAT = 42; // single precision float,    'E'
-static const int TDOUBLE = 82; // double precision float,    'D'
-static const int TCOMPLEX = 83; // complex (pair of floats)   'C'
-static const int TDBLCOMPLEX = 163; // double complex (2 doubles) 'M'
+class FitsUtility {
+public:
+	// DATATYPE               TFORM CODE
+	static const int TBIT = 1; //                            'X'
+	static const int TBYTE = 11; // 8-bit unsigned byte,       'B'
+	static const int TLOGICAL = 14; // logicals (int for keywords and char for table cols   'L'
+	static const int TSTRING = 16; // ASCII string,              'A'
+	static const int TSHORT = 21; // signed short,              'I'
+	static const int TLONG = 41; // signed long,
+	static const int TLONGLONG = 81; // 64-bit long signed integer 'K'
+	static const int TFLOAT = 42; // single precision float,    'E'
+	static const int TDOUBLE = 82; // double precision float,    'D'
+	static const int TCOMPLEX = 83; // complex (pair of floats)   'C'
+	static const int TDBLCOMPLEX = 163; // double complex (2 doubles) 'M'
 
-static const int TINT = 31; // int
-static const int TSBYTE = 12; // 8-bit signed byte,         'S'
-static const int TUINT = 30; // unsigned int               'V'
-static const int TUSHORT = 20; // unsigned short             'U'
-static const int TULONG = 40; // unsigned long
+	static const int TINT = 31; // int
+	static const int TSBYTE = 12; // 8-bit signed byte,         'S'
+	static const int TUINT = 30; // unsigned int               'V'
+	static const int TUSHORT = 20; // unsigned short             'U'
+	static const int TULONG = 40; // unsigned long
 
-namespace FitsUtility {
-std::string convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(std::string dataTypeName) {
-	dataTypeName = CxxUtilities::String::downCase(dataTypeName);
-	if (CxxUtilities::String::include(dataTypeName, "byte")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return "B";
+public:
+	static std::string convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(std::string dataTypeName) {
+		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
+		if (CxxUtilities::String::include(dataTypeName, "byte")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return "B";
+			} else {
+				return "S";
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "short")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return "U";
+			} else {
+				return "I";
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "int")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return "V";
+			} else {
+				return "J";
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "long")) {
+			return "K";
+		} else if (CxxUtilities::String::include(dataTypeName, "float")) {
+			return "E";
+		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
+			return "D";
 		} else {
-			return "S";
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "short")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return "U";
-		} else {
-			return "I";
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "int")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return "V";
-		} else {
-			return "J";
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "long")) {
-		return "K";
-	} else if (CxxUtilities::String::include(dataTypeName, "float")) {
-		return "E";
-	} else if (CxxUtilities::String::include(dataTypeName, "double")) {
-		return "D";
-	} else {
-		using namespace std;
-		cerr
-				<< "CxxUtilities::FitsUtility::convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(): Unrecognizable data type name "
-				<< dataTypeName << " provided." << endl;
-		return "";
-	}
-} // end of convertSIB2StyleDataTypeNameToCfitsioStyleTFORM()
-
-int getCfitsioStyleDataTypeNumber(std::string dataTypeName) {
-	dataTypeName = CxxUtilities::String::downCase(dataTypeName);
-	if (CxxUtilities::String::include(dataTypeName, "byte")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return TBYTE;
-		} else {
-			return TSBYTE;
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "short")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return TUSHORT;
-		} else {
-			return TSHORT;
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "int")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return TUINT;
-		} else {
-			return TINT;
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "long")) {
-		return TLONG;
-	} else if (CxxUtilities::String::include(dataTypeName, "float")) {
-		return TFLOAT;
-	} else if (CxxUtilities::String::include(dataTypeName, "double")) {
-		return TDOUBLE;
-	} else {
-		using namespace std;
-		cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name " << dataTypeName
-				<< " provided." << endl;
-		return 0;
-	}
-}
-
-std::string getCfitsioStyleDataTypeNumberAsString(std::string dataTypeName) {
-	dataTypeName = CxxUtilities::String::downCase(dataTypeName);
-	if (CxxUtilities::String::include(dataTypeName, "byte")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return "TBYTE";
-		} else {
-			return "TSBYTE";
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "short")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return "TUSHORT";
-		} else {
-			return "TSHORT";
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "int")) {
-		if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
-			return "TUINT";
-		} else {
-			return "TINT";
-		}
-	} else if (CxxUtilities::String::include(dataTypeName, "long")) {
-		return "TLONG";
-	} else if (CxxUtilities::String::include(dataTypeName, "float")) {
-		return "TFLOAT";
-	} else if (CxxUtilities::String::include(dataTypeName, "double")) {
-		return "TDOUBLE";
-	} else {
-		using namespace std;
-		cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name " << dataTypeName
-				<< " provided." << endl;
-		return "INVALID";
-	}
-}
-
-/**
- * SIB2-style data type names are:
- * byte,unsignedByte
- * short,unsignedShort
- * int,unsignedInt
- * long,unsignedLong
- * float
- * double
- * hexBinary
- */
-
-void getTZEROAndTSCALForSIB2StyleDataTypeName(std::string dataTypeName, double& resultingTZERO,
-		double& resultingTSCAL) {
-	char type = convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(dataTypeName)[0];
-	dataTypeName = CxxUtilities::String::downCase(dataTypeName);
-	if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")) {
-		//nothing to do
-		return;
-	}
-	if (CxxUtilities::String::include(dataTypeName, "unsigned")) { //unsigned
-		switch (type) {
-		case 'B': //unsiged byte
-			resultingTSCAL = 1;
-			resultingTZERO = 0;
-			break;
-		case 'I': //unsigned short
-		case 'U':
-			resultingTSCAL = 1;
-			resultingTZERO = 32768;
-			break;
-		case 'J': //unsigned int
-		case 'V':
-			resultingTSCAL = 1;
-			resultingTZERO = 2147483648;
-			break;
-		case 'K': //unsigned long
-			resultingTSCAL = 1;
-			resultingTZERO = 9223372036854775808;
-			break;
-		default:
-			break;
-		}
-	} else { //signed
-		switch (type) {
-		case 'B': //signed byte
-		case 'S':
-			resultingTSCAL = 1;
-			resultingTZERO = -128;
-			break;
-		case 'I': //signed short
-			resultingTSCAL = 1;
-			resultingTZERO = 0;
-			break;
-		case 'J': //signed int
-			resultingTSCAL = 1;
-			resultingTZERO = 0;
-			break;
-		case 'K': //signed long
-			resultingTSCAL = 1;
-			resultingTZERO = 0;
-			break;
-		default:
 			using namespace std;
-			cerr << "CxxUtilities::FitsUtility::getTZEROAndTSCALForSIB2StyleDataTypeName(): Unrecognizable data type name "
+			cerr
+					<< "CxxUtilities::FitsUtility::convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(): Unrecognizable data type name "
 					<< dataTypeName << " provided." << endl;
-			break;
+			return "";
+		}
+	} // end of convertSIB2StyleDataTypeNameToCfitsioStyleTFORM()
+
+	static int getCfitsioStyleDataTypeNumber(std::string dataTypeName) {
+		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
+		if (CxxUtilities::String::include(dataTypeName, "byte")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return TBYTE;
+			} else {
+				return TSBYTE;
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "short")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return TUSHORT;
+			} else {
+				return TSHORT;
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "int")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return TUINT;
+			} else {
+				return TINT;
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "long")) {
+			return TLONG;
+		} else if (CxxUtilities::String::include(dataTypeName, "float")) {
+			return TFLOAT;
+		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
+			return TDOUBLE;
+		} else {
+			using namespace std;
+			cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name "
+					<< dataTypeName << " provided." << endl;
+			return 0;
 		}
 	}
-} //end of getTZEROAndTSCALForSIB2StyleDataTypeName()
-}
+
+	staic
+	std::string getCfitsioStyleDataTypeNumberAsString(std::string dataTypeName) {
+		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
+		if (CxxUtilities::String::include(dataTypeName, "byte")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return "TBYTE";
+			} else {
+				return "TSBYTE";
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "short")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return "TUSHORT";
+			} else {
+				return "TSHORT";
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "int")) {
+			if (CxxUtilities::String::include(dataTypeName, "unsigned")) {
+				return "TUINT";
+			} else {
+				return "TINT";
+			}
+		} else if (CxxUtilities::String::include(dataTypeName, "long")) {
+			return "TLONG";
+		} else if (CxxUtilities::String::include(dataTypeName, "float")) {
+			return "TFLOAT";
+		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
+			return "TDOUBLE";
+		} else {
+			using namespace std;
+			cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name "
+					<< dataTypeName << " provided." << endl;
+			return "INVALID";
+		}
+	}
+
+	/**
+	 * SIB2-style data type names are:
+	 * byte,unsignedByte
+	 * short,unsignedShort
+	 * int,unsignedInt
+	 * long,unsignedLong
+	 * float
+	 * double
+	 * hexBinary
+	 */
+
+	static void getTZEROAndTSCALForSIB2StyleDataTypeName(std::string dataTypeName, double& resultingTZERO,
+			double& resultingTSCAL) {
+		char type = convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(dataTypeName)[0];
+		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
+		if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")) {
+			//nothing to do
+			return;
+		}
+		if (CxxUtilities::String::include(dataTypeName, "unsigned")) { //unsigned
+			switch (type) {
+			case 'B': //unsiged byte
+				resultingTSCAL = 1;
+				resultingTZERO = 0;
+				break;
+			case 'I': //unsigned short
+			case 'U':
+				resultingTSCAL = 1;
+				resultingTZERO = 32768;
+				break;
+			case 'J': //unsigned int
+			case 'V':
+				resultingTSCAL = 1;
+				resultingTZERO = 2147483648;
+				break;
+			case 'K': //unsigned long
+				resultingTSCAL = 1;
+				resultingTZERO = 9223372036854775808;
+				break;
+			default:
+				break;
+			}
+		} else { //signed
+			switch (type) {
+			case 'B': //signed byte
+			case 'S':
+				resultingTSCAL = 1;
+				resultingTZERO = -128;
+				break;
+			case 'I': //signed short
+				resultingTSCAL = 1;
+				resultingTZERO = 0;
+				break;
+			case 'J': //signed int
+				resultingTSCAL = 1;
+				resultingTZERO = 0;
+				break;
+			case 'K': //signed long
+				resultingTSCAL = 1;
+				resultingTZERO = 0;
+				break;
+			default:
+				using namespace std;
+				cerr << "CxxUtilities::FitsUtility::getTZEROAndTSCALForSIB2StyleDataTypeName(): Unrecognizable data type name "
+						<< dataTypeName << " provided." << endl;
+				break;
+			}
+		}
+	} //end of getTZEROAndTSCALForSIB2StyleDataTypeName()
+};
 
 class FitsColumnDefinition {
 public:
