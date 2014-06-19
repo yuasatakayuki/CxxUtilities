@@ -195,7 +195,7 @@ public:
 	 * @return received size
 	 */
 	size_t receive(uint8_t* data, uint32_t length, bool waitUntilSpecifiedLengthCompletes = false) throw (TCPSocketException) {
-		size_t result = 0;
+		int result = 0;
 		int remainingLength=length;
 		int readDoneLength=0;
 
