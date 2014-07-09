@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef TIMER_HH_
-#define TIMER_HH_
+#ifndef CXXUTILITIES_TIMER_HH_
+#define CXXUTILITIES_TIMER_HH_
 
 #include "Condition.hh"
 #include "Thread.hh"
@@ -77,4 +77,4 @@ public:
 };
 }
 
-#endif /* TIMER_HH_ */
+#endif /* CXXUTILITIES_TIMER_HH_ */

@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef INTERFACES_HH_
-#define INTERFACES_HH_
+#ifndef CXXUTILITIES_INTERFACES_HH_
+#define CXXUTILITIES_INTERFACES_HH_
 
 #include "CommonHeader.hh"
 #include "CxxUtilities/Condition.hh"
@@ -126,4 +126,4 @@ typedef TerminateInterface_<int> TerminateInterface;
 
 }
 
-#endif /* INTERFACES_HH_ */
+#endif /* CXXUTILITIES_INTERFACES_HH_ */

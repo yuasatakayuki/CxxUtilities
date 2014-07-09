@@ -5,6 +5,9 @@
  *      Author: yuasa
  */
 
+#ifndef CXXUTILITIES_NUMERICAL_HH_
+#define CXXUTILITIES_NUMERICAL_HH_
+
 namespace CxxUtilities {
 
 class Function1D {
@@ -55,3 +58,5 @@ public:
 };
 
 }
+
+#endif /* CXXUTILITIES_NUMERICAL_HH_ */

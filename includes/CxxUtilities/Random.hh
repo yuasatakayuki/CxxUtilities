@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef RANDOM_HH_
-#define RANDOM_HH_
+#ifndef CXXUTILITIES_RANDOM_HH_
+#define CXXUTILITIES_RANDOM_HH_
 
 namespace CxxUtilities {
 
@@ -223,4 +223,4 @@ public:
 
 }
 
-#endif /* RANDOM_HH_ */
+#endif /* CXXUTILITIES_RANDOM_HH_ */

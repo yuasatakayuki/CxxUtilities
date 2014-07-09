@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef FITSFILE_HH_
-#define FITSFILE_HH_
+#ifndef CXXUTILITIES_FITSFILE_HH_
+#define CXXUTILITIES_FITSFILE_HH_
 
 #include "CxxUtilities/String.hh"
 
@@ -491,4 +491,4 @@ public:
 };
 
 }
-#endif /* FITSFILE_HH_ */
+#endif /* CXXUTILITIES_FITSFILE_HH_ */

@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef COUNTER_HH_
-#define COUNTER_HH_
+#ifndef CXXUTILITIES_COUNTER_HH_
+#define CXXUTILITIES_COUNTER_HH_
 
 #include "CommonHeader.hh"
 #include "Mutex.hh"
@@ -178,4 +178,4 @@ typedef Counters_<int> Counters;
 
 
 
-#endif /* COUNTER_HH_ */
+#endif /* CXXUTILITIES_COUNTER_HH_ */

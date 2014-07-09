@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef TERMINALCONTROL_HH_
-#define TERMINALCONTROL_HH_
+#ifndef CXXUTILITIES_TERMINALCONTROL_HH_
+#define CXXUTILITIES_TERMINALCONTROL_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 
@@ -47,4 +47,4 @@ public:
 
 }
 
-#endif /* TERMINALCONTROL_HH_ */
+#endif /* CXXUTILITIES_TERMINALCONTROL_HH_ */

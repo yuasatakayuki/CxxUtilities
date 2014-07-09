@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef DIRECTORY_HH_
-#define DIRECTORY_HH_
+#ifndef CXXUTILITIES_DIRECTORY_HH_
+#define CXXUTILITIES_DIRECTORY_HH_
 
 #include "CommonHeader.hh"
 
@@ -147,4 +147,4 @@ public:
 
 }
 
-#endif /* DIRECTORY_HH_ */
+#endif /* CXXUTILITIES_DIRECTORY_HH_ */

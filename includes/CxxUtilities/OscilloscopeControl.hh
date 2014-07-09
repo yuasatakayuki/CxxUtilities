@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef OSCILLOSCOPECONTROL_HH_
-#define OSCILLOSCOPECONTROL_HH_
+#ifndef CXXUTILITIES_OSCILLOSCOPECONTROL_HH_
+#define CXXUTILITIES_OSCILLOSCOPECONTROL_HH_
 
 #include "TCPSocket.hh"
 #include "CommonHeader.hh"
@@ -17,7 +17,7 @@ uint8_t* buffer = new uint8_t[BufferSize];
 void sendCommand(CxxUtilities::TCPSocket* socket, std::string command) {
 	using namespace std;
 	cout << "Sending command " << command << endl;
-	string str = command + "´n´r";
+	string str = command + "ï¿½nï¿½r";
 	socket->send((void*) str.c_str(), str.size());
 }
 
@@ -81,4 +81,4 @@ int main(int argc, char* argv[]) {
 	ofs.close();
 }
 
-#endif /* OSCILLOSCOPECONTROL_HH_ */
+#endif /* CXXUTILITIES_OSCILLOSCOPECONTROL_HH_ */

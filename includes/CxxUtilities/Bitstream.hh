@@ -5,8 +5,8 @@
  *      Author: Soki Sakurai
  */
 
-#ifndef BITSTREAM_HH_
-#define BITSTREAM_HH_
+#ifndef CXXUTILITIES_BITSTREAM_HH_
+#define CXXUTILITIES_BITSTREAM_HH_
 
 #include <iostream>
 #include <vector>
@@ -497,4 +497,4 @@ private:
 };
 
 }
-#endif /* BITSTREAM_HH_ */
+#endif /* CXXUTILITIES_BITSTREAM_HH_ */

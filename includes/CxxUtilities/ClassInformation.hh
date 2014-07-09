@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef CLASSINFORMATION_HH_
-#define CLASSINFORMATION_HH_
+#ifndef CXXUTILITIES_CLASSINFORMATION_HH_
+#define CXXUTILITIES_CLASSINFORMATION_HH_
 
 #include <typeinfo>
 #include <cxxabi.h>

@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef ENV_HH_
-#define ENV_HH_
+#ifndef CXXUTILITIES_ENV_HH_
+#define CXXUTILITIES_ENV_HH_
 
 #include "CommonHeader.hh"
 
@@ -36,4 +36,4 @@ public:
 }
 
 
-#endif /* ENV_HH_ */
+#endif /* CXXUTILITIES_ENV_HH_ */

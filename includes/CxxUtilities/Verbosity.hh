@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef VERBOSITY_HH_
-#define VERBOSITY_HH_
+#ifndef CXXUTILITIES_VERBOSITY_HH_
+#define CXXUTILITIES_VERBOSITY_HH_
 
 #include "CommonHeader.hh"
 
@@ -66,4 +66,4 @@ template<typename T> int _Verbosity<T>::level = _Verbosity<T>::DefaultVerbosityL
 
 typedef _Verbosity<int> Verbosity;
 }
-#endif /* VERBOSITY_HH_ */
+#endif /* CXXUTILITIES_VERBOSITY_HH_ */

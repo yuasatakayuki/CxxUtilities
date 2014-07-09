@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef CXXUTILITIES_TIME_HH_
-#define CXXUTILITIES_TIME_HH_
+#ifndef CXXUTILITIES_CXXUTILITIES_TIME_HH_
+#define CXXUTILITIES_CXXUTILITIES_TIME_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
 #ifdef __MACH__

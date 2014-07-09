@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef HISTOGRAM_HH_
-#define HISTOGRAM_HH_
+#ifndef CXXUTILITIES_HISTOGRAM_HH_
+#define CXXUTILITIES_HISTOGRAM_HH_
 
 #include "CommonHeader.hh"
 #include "Interfaces.hh"
@@ -102,4 +102,4 @@ public:
 
 }
 
-#endif /* HISTOGRAM_HH_ */
+#endif /* CXXUTILITIES_HISTOGRAM_HH_ */

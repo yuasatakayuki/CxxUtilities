@@ -5,8 +5,8 @@
  *      Author: yuasa
  */
 
-#ifndef LOGGER_HH_
-#define LOGGER_HH_
+#ifndef CXXUTILITIES_LOGGER_HH_
+#define CXXUTILITIES_LOGGER_HH_
 
 #include "CommonHeader.hh"
 #include "Time.hh"
@@ -252,4 +252,4 @@ typedef Logger_<int> Logger;
 
 }
 
-#endif /* LOGGER_HH_ */
+#endif /* CXXUTILITIES_LOGGER_HH_ */
