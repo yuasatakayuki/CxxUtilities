@@ -18,15 +18,15 @@ namespace CCTYPE {
 
 class String {
 public:
-	static int toInteger(char* str) {
+	static int64_t toInteger(char* str) {
 		return toInteger(std::string(str));
 	}
 
-	static int toInteger(const char* str) {
+	static int64_t toInteger(const char* str) {
 		return toInteger(std::string(str));
 	}
 
-	static int toInteger(std::string str) {
+	static int64_t toInteger(std::string str) {
 		using namespace std;
 		stringstream ss;
 		ss << str;
@@ -386,6 +386,43 @@ public:
 		std::string result;
 		std::transform(str.begin(), str.end(), std::back_inserter(result), (int (*)(int))std::tolower);
 		return result;
+	}
+
+public:
+	static bool isNumeric(std::string str) {
+		int base=10;
+		if(str.size()>2 && str[0]=='0' && (str[1]=='x' || str[1]=='X') ) {
+			base=16;
+		}
+		std::istringstream inputstream( str );
+		if ( base == 10 ) {
+			double dummy;
+			inputstream >> dummy;
+		}
+		else if ( base == 8 || base == 16 ) {
+			int dummy;
+			inputstream >> ( ( base == 8 ) ? std::oct : std::hex ) >> dummy;
+		} else {
+			return false;
+		}
+		if ( ! inputstream ) {
+			return false;
+		}
+		return ( inputstream.rdbuf()->in_avail() == 0 );
+	}
+
+public:
+	static bool isIntegerNumeric(std::string str) {
+		//first, check if numeric
+		if(isNumeric(str)) { //is numeric
+			if(str.find('.')==std::string::npos && str.find('e')==std::string::npos && str.find('E')==std::string::npos) {
+				return true;
+			} else {
+				return false;
+			}
+		} else { //is not numeric
+			return false;
+		}
 	}
 
 };
