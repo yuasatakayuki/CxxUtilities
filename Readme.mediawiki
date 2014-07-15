@@ -5,23 +5,23 @@ A header-only C++ utility class library.
 If you are using Homebrew package control system on Mac,
 you can easily install CxxUtilities via tap yuasatakayuki/hxisgd.
 Execute the following:
-<code>
+<pre>
 brew tap yuasatakayuki/hxisgd
 brew install cxxutilities
-</code>
+</pre>
 In this case, the library will be installed to /usr/local/include/CxxUtilities (default location of Homebrew).
 
 ===Manual install using cmake===
 CxxUtilities can be installed using cmake.
 Execute the following:
-<code>
+<pre>
 download CxxUtilities zip archive from github
 cd CxxUtilities
 mkdir build
 cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/include
 make install
-</code>
+</pre>
 
 This will install the library to /usr/local/include/CxxUtilities.
 If you would like to install other locations, modify CMAKE_INSTALL_PREFIX value.
@@ -29,20 +29,20 @@ If you would like to install other locations, modify CMAKE_INSTALL_PREFIX value.
 
 ==Usage==
 Include the top-level header file in your source.
-<code>
+<pre>
    #include "CxxUtilities/File.hh"
-</code>
+</pre>
 Since CxxUtilities requires C++11 compiler, set compiler options properly.
 
 '''clang++'''
-<code>
+<pre>
 clang++ -std=c++11 -stdlib=libc++ yourApplication.cc -o yourApplication
-</code>
+</pre>
 
 '''gcc'''
-<code>
+<pre>
 g++ -std=c++11 yourApplication.cc -o yourApplication
-</code>
+</pre>
 
 If you installed CxxUtilities to non-default include path, you need to put an additional include path option like "-I/home/username/include".
    
