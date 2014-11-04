@@ -60,9 +60,9 @@ public:
 			return "E";
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return "D";
-		} else if (CxxUtilities::String::include(dataTypeName, "X") || CxxUtilities::String::include(dataTypeName, "bits")
+		} else if (CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bits")
 				|| CxxUtilities::String::include(dataTypeName, "bit")) {
-			std::string dataTypeWidth = CxxUtilities::String::replace(dataTypeName, "X", "");
+			std::string dataTypeWidth = CxxUtilities::String::replace(dataTypeName, "x", "");
 			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, "bits", "");
 			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, "bit", "");
 			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, " ", "");
@@ -102,7 +102,7 @@ public:
 			return TFLOAT;
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return TDOUBLE;
-		} else if (CxxUtilities::String::include(dataTypeName, "X") || CxxUtilities::String::include(dataTypeName, "bits")
+		} else if (CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bits")
 				|| CxxUtilities::String::include(dataTypeName, "bit")) {
 			return TBIT;
 		} else {
@@ -139,7 +139,7 @@ public:
 			return "TFLOAT";
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return "TDOUBLE";
-		} else if (CxxUtilities::String::include(dataTypeName, "X") || CxxUtilities::String::include(dataTypeName, "bits")
+		} else if (CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bits")
 				|| CxxUtilities::String::include(dataTypeName, "bit")) {
 			return "TBIT";
 		} else {
@@ -165,7 +165,8 @@ public:
 			double& resultingTSCAL) {
 		char type = convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(dataTypeName)[0];
 		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
-		if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")) {
+		if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")
+		|| CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bit")) {
 			//nothing to do
 			return;
 		}
