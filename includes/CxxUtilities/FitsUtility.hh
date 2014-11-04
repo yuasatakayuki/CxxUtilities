@@ -60,6 +60,13 @@ public:
 			return "E";
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return "D";
+		} else if (CxxUtilities::String::include(dataTypeName, "X") || CxxUtilities::String::include(dataTypeName, "bits")
+				|| CxxUtilities::String::include(dataTypeName, "bit")) {
+			std::string dataTypeWidth = CxxUtilities::String::replace(dataTypeName, "X", "");
+			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, "bits", "");
+			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, "bit", "");
+			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, " ", "");
+			return dataTypeWidth + "X";
 		} else {
 			using namespace std;
 			cerr
@@ -95,6 +102,9 @@ public:
 			return TFLOAT;
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return TDOUBLE;
+		} else if (CxxUtilities::String::include(dataTypeName, "X") || CxxUtilities::String::include(dataTypeName, "bits")
+				|| CxxUtilities::String::include(dataTypeName, "bit")) {
+			return TBIT;
 		} else {
 			using namespace std;
 			cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name "
@@ -129,6 +139,9 @@ public:
 			return "TFLOAT";
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return "TDOUBLE";
+		} else if (CxxUtilities::String::include(dataTypeName, "X") || CxxUtilities::String::include(dataTypeName, "bits")
+				|| CxxUtilities::String::include(dataTypeName, "bit")) {
+			return "TBIT";
 		} else {
 			using namespace std;
 			cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name "
