@@ -268,7 +268,12 @@ public:
 	FitsColumnDefinition(std::string columnName, std::string columnDataType, std::string comment = "") {
 		this->TTYPE = columnName;
 		this->dataTypeName = columnDataType;
-		this->TFORM = "1" + FitsUtility::convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(columnDataType);
+		std::string cfitsioStyleTFORM = FitsUtility::convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(columnDataType);
+		if (CxxUtilities::String::containsNumber(cfitsioStyleTFORM)) {
+			this->TFORM = cfitsioStyleTFORM;
+		} else {
+			this->TFORM = "1" + cfitsioStyleTFORM;
+		}
 		this->comment = comment;
 		setTZEROAndTSCAL();
 	}
