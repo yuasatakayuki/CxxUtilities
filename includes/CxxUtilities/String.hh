@@ -297,6 +297,16 @@ public:
 		}
 	}
 
+public:
+	static bool containsNumber(std::string str) {
+		for (auto ch : str) {
+			if ('0' <= ch && ch <= '9') {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	static std::string toStringFromInteger(int avalue) {
 		std::stringstream ss;
 		ss << avalue;
