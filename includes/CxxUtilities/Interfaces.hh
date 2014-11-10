@@ -11,6 +11,7 @@
 #include "CommonHeader.hh"
 #include "CxxUtilities/Condition.hh"
 #include "CxxUtilities/Thread.hh"
+#include "CxxUtilities/TCPSocket.hh"
 
 namespace CxxUtilities {
 
@@ -46,18 +47,18 @@ private:
 	std::string instanceName;
 
 public:
-	InstanceNameInterface(std::string instanceName){
-		this->instanceName=instanceName;
+	InstanceNameInterface(std::string instanceName) {
+		this->instanceName = instanceName;
 	}
 
 public:
-	std::string getInstanceName(){
+	std::string getInstanceName() {
 		return instanceName;
 	}
 
 public:
-	void setInstanceName(std::string instanceName){
-		this->instanceName=instanceName;
+	void setInstanceName(std::string instanceName) {
+		this->instanceName = instanceName;
 	}
 
 };
@@ -123,6 +124,66 @@ template<typename T>
 Mutex TerminateInterface_<T>::mutex;
 
 typedef TerminateInterface_<int> TerminateInterface;
+
+class MultipleTCPClientInterface: public CxxUtilities::StoppableThread {
+public:
+	std::vector<TCPServerAcceptedSocket*> acceptedSockets;
+
+private:
+	int tcpPortNumber = 0;
+	TCPServerSocket* serverSocket;
+
+public:
+	MultipleTCPClientInterface(int tcpPortNumber) {
+		this->tcpPortNumber = tcpPortNumber;
+	}
+
+public:
+	static constexpr double AcceptTimeoutDuration=1000;//ms
+
+public:
+	void run() {
+		serverSocket = new TCPServerSocket(tcpPortNumber);
+		try {
+			serverSocket->open();
+		} catch (TCPSocketException& e) {
+			using namespace std;
+			cerr << "TCPServerSocket open failed (" << e.toString() << ")" << endl;
+			cerr << "MultipleTCPClientInterface is stopped" << endl;
+			return;
+		}
+		while (!this->stopped) {
+			try {
+				TCPServerAcceptedSocket* acceptedSocket =  serverSocket->accept(AcceptTimeoutDuration);
+			} catch (TCPSocketException& e) {
+				if (e.getStatus() == TCPSocketException::Timeout) {
+					continue;
+				}
+				using namespace std;
+				cerr << "TCPServerSocket accept failed (" << e.toString() << ")" << endl;
+				cerr << "MultipleTCPClientInterface is stopped" << endl;
+				this->stop();
+				return;
+			}
+		}
+	}
+
+public:
+	size_t getNAcceptedSockets() {
+		return acceptedSockets.size();
+	}
+
+public:
+	void disconnectAll() {
+		for (auto socket : acceptedSockets) {
+			socket->close();
+		}
+		acceptedSockets.clear();
+	}
+
+public:
+
+};
 
 }
 
