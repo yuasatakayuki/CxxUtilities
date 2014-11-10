@@ -288,11 +288,7 @@ public:
 			timeoutDurationInMilliSec = durationInMilliSec;
 			struct timeval tv;
 			tv.tv_sec = (unsigned int) (floor(durationInMilliSec / 1000.));
-			if (durationInMilliSec > floor(durationInMilliSec)) {
-				tv.tv_usec = (int) ((durationInMilliSec - floor(durationInMilliSec)) * 1000);
-			} else {
-				tv.tv_usec = (int) (durationInMilliSec * 1000);
-			}
+			tv.tv_usec = (int) ((timeoutDurationInMilliSec - floor(timeoutDurationInMilliSec)) * 1000);
 			setsockopt(socketdescriptor, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof tv);
 		}else{
 			throw TCPSocketException(TCPSocketException::TimeoutDurationCannotBeSetToDisconnectedSocket);
