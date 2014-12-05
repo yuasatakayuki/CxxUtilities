@@ -435,6 +435,23 @@ public:
 		}
 	}
 
+public:
+	/** Converts string to boolean.
+	 * true or yes => true.
+	 * false or no => false.
+	 * otherwise => false.
+	 */
+	static bool toBoolean(std::string str){
+		if(str=="true" ||str=="TRUE" || str == "yes" || str=="YES"){
+			return true;
+		}else if(str=="false" ||str=="FALSE" || str == "no" || str=="NO"){
+			return false;
+		}else{
+			return false;
+		}
+
+	}
+
 };
 }
 
