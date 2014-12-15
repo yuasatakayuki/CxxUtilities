@@ -9,6 +9,7 @@
 #define CXXUTILITIES_CXXUTILITIES_TIME_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
+#include <time.h>
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>
@@ -92,6 +93,18 @@ public:
 #endif
 
 		return (double) ((ts.tv_sec + ts.tv_nsec *1e-9 )*1000);
+	}
+
+public:
+	static time_t getUNIXTime(std::string yyyymmdd_hhmmss){
+	   time_t timer;
+	   struct tm tm;
+	   const char* datetime = "2013-06-15 12:00:00";
+	   if( strptime(yyyymmdd_hhmmss.c_str(), "%Y%m%d_%H%M%S", &tm ) != NULL ) {
+	      return mktime(&tm);
+	   }else{
+	  	 return 0;
+	   }
 	}
 };
 
