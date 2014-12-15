@@ -9,6 +9,7 @@
 #define CXXUTILITIES_STRING_HH_
 
 #include "CxxUtilities/CommonHeader.hh"
+#include "CxxUtilities/Date.hh"
 
 namespace CxxUtilities {
 
@@ -441,15 +442,20 @@ public:
 	 * false or no => false.
 	 * otherwise => false.
 	 */
-	static bool toBoolean(std::string str){
-		if(str=="true" ||str=="TRUE" || str == "yes" || str=="YES"){
+	static bool toBoolean(std::string str) {
+		if(str=="true" ||str=="TRUE" || str == "yes" || str=="YES") {
 			return true;
-		}else if(str=="false" ||str=="FALSE" || str == "no" || str=="NO"){
+		} else if(str=="false" ||str=="FALSE" || str == "no" || str=="NO") {
 			return false;
-		}else{
+		} else {
 			return false;
 		}
 
+	}
+
+public:
+	static CxxUtilities::Date parseYYYYMMDD_HHMMSS(std::string yyyymmdd_hhmmss) {
+		return CxxUtilities::Date::parseYYYYMMDD_HHMMSS(yyyymmdd_hhmmss);
 	}
 
 };
