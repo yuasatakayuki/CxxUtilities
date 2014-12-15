@@ -13,6 +13,7 @@
 namespace CxxUtilities {
 
 class FitsUtility {
+#ifndef TBIT
 public:
 	// DATATYPE               TFORM CODE
 	static const int TBIT = 1; //                            'X'
@@ -32,6 +33,7 @@ public:
 	static const int TUINT = 30; // unsigned int               'V'
 	static const int TUSHORT = 20; // unsigned short             'U'
 	static const int TULONG = 40; // unsigned long
+#endif
 
 public:
 	static std::string convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(std::string dataTypeName) {
