@@ -101,6 +101,7 @@
 #include "CxxUtilities/Counter.hh"
 #include "CxxUtilities/String.hh"
 #include "CxxUtilities/File.hh"
+#include "CxxUtilities/Date.hh"
 #include "CxxUtilities/Directory.hh"
 #include "CxxUtilities/Logger.hh"
 #include "CxxUtilities/Interfaces.hh"
