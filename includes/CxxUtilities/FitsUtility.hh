@@ -168,7 +168,7 @@ public:
 		char type = convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(dataTypeName)[0];
 		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
 		if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")
-		|| CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bit")) {
+				|| CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bit")) {
 			//nothing to do
 			return;
 		}
@@ -318,12 +318,12 @@ public:
 	std::vector<FitsColumnDefinition> columnDefinitions;
 
 public:
-	FitsExtensionDefinition(std::string columnName) {
+	FitsExtensionDefinition(std::string extensionName) {
 		this->extensionName = extensionName;
 	}
 
 public:
-	FitsExtensionDefinition(std::string columnName, std::vector<FitsColumnDefinition> columnDefinitions) {
+	FitsExtensionDefinition(std::string extensionName, std::vector<FitsColumnDefinition> columnDefinitions) {
 		this->extensionName = extensionName;
 		this->columnDefinitions = columnDefinitions;
 	}
