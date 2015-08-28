@@ -423,7 +423,7 @@ public:
 	 * @param[in] endian Bitstream::Endian::Big or Bitstream::Endian::Little
 	 * @return uintN*8_t value of the N*8-bit data (as uint64_t)
 	 */
-	uint64_t popNBytes(int nBytes, int endian) {
+	uint64_t popNBytes(size_t nBytes, size_t endian) {
 		if (nBytes > 8) {
 			throw BitstreamException(BitstreamException::InvalidByteWidth);
 		}
