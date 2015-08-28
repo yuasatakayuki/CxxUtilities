@@ -77,7 +77,6 @@ public:
 
 public:
 	static double getClockValueInMilliSec() {
-		struct timespec tp;
 		struct timespec ts;
 
 #ifdef __MACH__ // OS X does not have clock_gettime, use clock_get_time
@@ -97,9 +96,8 @@ public:
 
 public:
 	static time_t getUNIXTime(std::string yyyymmdd_hhmmss){
-	   time_t timer;
 	   struct tm tm;
-	   const char* datetime = "2013-06-15 12:00:00";
+	   //const char* datetime = "2013-06-15 12:00:00";
 	   if( strptime(yyyymmdd_hhmmss.c_str(), "%Y%m%d_%H%M%S", &tm ) != NULL ) {
 	      return mktime(&tm);
 	   }else{
