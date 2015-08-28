@@ -329,7 +329,7 @@ public:
 	 */
 	void setNoDelay() {
 		int flag = 1;
-		int result = setsockopt(socketdescriptor, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
+		setsockopt(socketdescriptor, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
 	}
 };
 
@@ -338,9 +338,6 @@ public:
  * data transfer with TCPSocket server socket.
  */
 class TCPServerAcceptedSocket: public TCPSocket {
-private:
-	struct ::sockaddr_in address;
-
 public:
 	/** Constructs an instance.
 	 */
@@ -491,7 +488,7 @@ public:
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::AcceptException);
 		} else {
-			int acceptedSocketDescriptor = result;
+			//int acceptedSocketDescriptor = result;
 			TCPServerAcceptedSocket* acceptedsocket = new TCPServerAcceptedSocket();
 			acceptedsocket->setAddress(&clientaddress);
 			acceptedsocket->setPort(getPort());
@@ -528,7 +525,7 @@ public:
 		}
 
 		struct ::sockaddr_in clientaddress;
-		int acceptedSocketDescriptor = result;
+		//int acceptedSocketDescriptor = result;
 
 		int length = sizeof(clientaddress);
 		result = 0;
@@ -559,7 +556,6 @@ public:
 class TCPClientSocket: public TCPSocket {
 private:
 	std::string url;
-	struct ::sockaddr_in serveraddress;
 
 public:
 	TCPClientSocket() :
