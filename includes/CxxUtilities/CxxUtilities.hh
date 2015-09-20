@@ -128,6 +128,8 @@
 
 #include "CxxUtilities/FitsUtility.hh"
 
+#include "CxxUtilities/MessageTemplate.hh"
+
 #ifdef CXXUTILITIES_USE_YAML
 #include "yaml-cpp/yaml.h"
 #endif /*CXXUTILITIES_USE_YAML*/
