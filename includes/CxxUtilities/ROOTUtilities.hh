@@ -63,7 +63,7 @@ public:
 public:
 	static std::string getObjStringAsString(TDirectory* dir, std::string name){
 		auto str = (TObjString*)dir->Get(name.c_str());
-		std::string s(str->GetString()));
+		std::string s(str->GetString());
 		return s;
 	}
 	static std::string readObjStringAsString(TDirectory* dir, std::string name){
