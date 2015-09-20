@@ -467,7 +467,8 @@ public:
 				auto columnName = this->columnDefinitions[i].TTYPE;
 				auto columnIndex = i;
 				auto dataTypeNumber = FitsUtility::getCfitsioStyleDataTypeNumber(this->columnDefinitions[i].dataTypeName);
-				std::tuple<std::string, int, int> entry = { columnName, columnIndex, dataTypeNumber };
+				//std::tuple<std::string, int, int> entry = { columnName, columnIndex, dataTypeNumber };
+				std::tuple<std::string, int, int> entry = std::make_tuple(columnName, columnIndex, dataTypeNumber);
 				this->columnNameAndColumnIndexVector.push_back(entry);
 			}
 		}
