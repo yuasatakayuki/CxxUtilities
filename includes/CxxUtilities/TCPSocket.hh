@@ -169,7 +169,7 @@ public:
 	 * @return sent size
 	 */
 	size_t send(const uint8_t* data, size_t length) throw (TCPSocketException) {
-		int result = ::send(socketdescriptor, (void*)data, length, 0);
+		int result = ::send(socketdescriptor, (void*) data, length, 0);
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::TCPSocketError);
 		}
@@ -184,7 +184,7 @@ public:
 	 * @return received size
 	 */
 	inline size_t receiveLoopUntilSpecifiedLengthCompletes(uint8_t* data, uint32_t length) throw (TCPSocketException) {
-		return receive(data,length,true);
+		return receive(data, length, true);
 	}
 
 public:
@@ -194,13 +194,14 @@ public:
 	 * @param[in] length the maximum size of the data buffer
 	 * @return received size
 	 */
-	size_t receive(uint8_t* data, uint32_t length, bool waitUntilSpecifiedLengthCompletes = false) throw (TCPSocketException) {
+	size_t receive(uint8_t* data, uint32_t length, bool waitUntilSpecifiedLengthCompletes = false)
+			throw (TCPSocketException) {
 		int result = 0;
-		int remainingLength=length;
-		int readDoneLength=0;
+		int remainingLength = length;
+		int readDoneLength = 0;
 
 		_CxxUtilities_TCPSocket_receive_loop: //
-		result = ::recv(socketdescriptor, ((uint8_t*)data+readDoneLength), remainingLength, 0);
+		result = ::recv(socketdescriptor, ((uint8_t*) data + readDoneLength), remainingLength, 0);
 
 		if (result <= 0) {
 			if (errno == EAGAIN || errno == EWOULDBLOCK) {
@@ -247,9 +248,9 @@ public:
 		if (waitUntilSpecifiedLengthCompletes == false) {
 			return result;
 		} else {
-			remainingLength=remainingLength-result;
-			readDoneLength=readDoneLength+result;
-			if(remainingLength==0){
+			remainingLength = remainingLength - result;
+			readDoneLength = readDoneLength + result;
+			if (remainingLength == 0) {
 				return length;
 			}
 			goto _CxxUtilities_TCPSocket_receive_loop;
@@ -294,7 +295,7 @@ public:
 				tv.tv_usec = (int) (durationInMilliSec * 1000);
 			}
 			setsockopt(socketdescriptor, SOL_SOCKET, SO_RCVTIMEO, (char *) &tv, sizeof tv);
-		}else{
+		} else {
 			throw TCPSocketException(TCPSocketException::TimeoutDurationCannotBeSetToDisconnectedSocket);
 		}
 	}
@@ -328,7 +329,7 @@ public:
 	 */
 	void setNoDelay() {
 		int flag = 1;
-		int result = setsockopt(socketdescriptor, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
+		setsockopt(socketdescriptor, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int));
 	}
 };
 
@@ -337,9 +338,6 @@ public:
  * data transfer with TCPSocket server socket.
  */
 class TCPServerAcceptedSocket: public TCPSocket {
-private:
-	struct ::sockaddr_in address;
-
 public:
 	/** Constructs an instance.
 	 */
@@ -490,7 +488,7 @@ public:
 		if (result < 0) {
 			throw TCPSocketException(TCPSocketException::AcceptException);
 		} else {
-			int acceptedSocketDescriptor = result;
+			//int acceptedSocketDescriptor = result;
 			TCPServerAcceptedSocket* acceptedsocket = new TCPServerAcceptedSocket();
 			acceptedsocket->setAddress(&clientaddress);
 			acceptedsocket->setPort(getPort());
@@ -527,7 +525,7 @@ public:
 		}
 
 		struct ::sockaddr_in clientaddress;
-		int acceptedSocketDescriptor = result;
+		//int acceptedSocketDescriptor = result;
 
 		int length = sizeof(clientaddress);
 		result = 0;
@@ -558,7 +556,6 @@ public:
 class TCPClientSocket: public TCPSocket {
 private:
 	std::string url;
-	struct ::sockaddr_in serveraddress;
 
 public:
 	TCPClientSocket() :
@@ -678,8 +675,7 @@ public:
 						status = TCPSocketConnected;
 						//reset flag
 						if (fcntl(socketdescriptor, F_SETFL, flag) < 0) {
-							throw TCPSocketException(
-									TCPSocketException::ConnectExceptionWhenChangingSocketModeToBlocking);
+							throw TCPSocketException(TCPSocketException::ConnectExceptionWhenChangingSocketModeToBlocking);
 						}
 						return;
 					} else {
@@ -687,8 +683,7 @@ public:
 					}
 				}
 			} else {
-				throw TCPSocketException(
-						TCPSocketException::ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult);
+				throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionReturnedUnexpecedResult);
 			}
 		} else {
 			throw TCPSocketException(TCPSocketException::ConnectExceptionNonBlockingConnectionImmediateluSucceeded);

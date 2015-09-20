@@ -13,6 +13,7 @@
 namespace CxxUtilities {
 
 class FitsUtility {
+#ifndef TBIT
 public:
 	// DATATYPE               TFORM CODE
 	static const int TBIT = 1; //                            'X'
@@ -32,6 +33,7 @@ public:
 	static const int TUINT = 30; // unsigned int               'V'
 	static const int TUSHORT = 20; // unsigned short             'U'
 	static const int TULONG = 40; // unsigned long
+#endif
 
 public:
 	static std::string convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(std::string dataTypeName) {
@@ -60,6 +62,13 @@ public:
 			return "E";
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return "D";
+		} else if (CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bits")
+				|| CxxUtilities::String::include(dataTypeName, "bit")) {
+			std::string dataTypeWidth = CxxUtilities::String::replace(dataTypeName, "x", "");
+			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, "bits", "");
+			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, "bit", "");
+			dataTypeWidth = CxxUtilities::String::replace(dataTypeWidth, " ", "");
+			return dataTypeWidth + "X";
 		} else {
 			using namespace std;
 			cerr
@@ -95,6 +104,9 @@ public:
 			return TFLOAT;
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return TDOUBLE;
+		} else if (CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bits")
+				|| CxxUtilities::String::include(dataTypeName, "bit")) {
+			return TBIT;
 		} else {
 			using namespace std;
 			cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name "
@@ -129,6 +141,9 @@ public:
 			return "TFLOAT";
 		} else if (CxxUtilities::String::include(dataTypeName, "double")) {
 			return "TDOUBLE";
+		} else if (CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bits")
+				|| CxxUtilities::String::include(dataTypeName, "bit")) {
+			return "TBIT";
 		} else {
 			using namespace std;
 			cerr << "CxxUtilities::FitsUtility::getCfitsioStyleDataTypeNumber(): Unrecognizable data type name "
@@ -152,7 +167,8 @@ public:
 			double& resultingTSCAL) {
 		char type = convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(dataTypeName)[0];
 		dataTypeName = CxxUtilities::String::downCase(dataTypeName);
-		if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")) {
+		if (CxxUtilities::String::include(dataTypeName, "float") || CxxUtilities::String::include(dataTypeName, "double")
+				|| CxxUtilities::String::include(dataTypeName, "x") || CxxUtilities::String::include(dataTypeName, "bit")) {
 			//nothing to do
 			return;
 		}
@@ -255,7 +271,12 @@ public:
 	FitsColumnDefinition(std::string columnName, std::string columnDataType, std::string comment = "") {
 		this->TTYPE = columnName;
 		this->dataTypeName = columnDataType;
-		this->TFORM = "1" + FitsUtility::convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(columnDataType);
+		std::string cfitsioStyleTFORM = FitsUtility::convertSIB2StyleDataTypeNameToCfitsioStyleTFORM(columnDataType);
+		if (CxxUtilities::String::containsNumber(cfitsioStyleTFORM)) {
+			this->TFORM = cfitsioStyleTFORM;
+		} else {
+			this->TFORM = "1" + cfitsioStyleTFORM;
+		}
 		this->comment = comment;
 		setTZEROAndTSCAL();
 	}
@@ -297,12 +318,12 @@ public:
 	std::vector<FitsColumnDefinition> columnDefinitions;
 
 public:
-	FitsExtensionDefinition(std::string columnName) {
+	FitsExtensionDefinition(std::string extensionName) {
 		this->extensionName = extensionName;
 	}
 
 public:
-	FitsExtensionDefinition(std::string columnName, std::vector<FitsColumnDefinition> columnDefinitions) {
+	FitsExtensionDefinition(std::string extensionName, std::vector<FitsColumnDefinition> columnDefinitions) {
 		this->extensionName = extensionName;
 		this->columnDefinitions = columnDefinitions;
 	}
@@ -467,7 +488,6 @@ public:
 				auto columnName = this->columnDefinitions[i].TTYPE;
 				auto columnIndex = i;
 				auto dataTypeNumber = FitsUtility::getCfitsioStyleDataTypeNumber(this->columnDefinitions[i].dataTypeName);
-				//std::tuple<std::string, int, int> entry = { columnName, columnIndex, dataTypeNumber };
 				std::tuple<std::string, int, int> entry = std::make_tuple(columnName, columnIndex, dataTypeNumber);
 				this->columnNameAndColumnIndexVector.push_back(entry);
 			}
