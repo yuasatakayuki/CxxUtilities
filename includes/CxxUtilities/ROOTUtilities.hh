@@ -29,6 +29,50 @@
 
 namespace CxxUtilities {
 class ROOTUtilities {
+	//============================================
+	// Read TObjString from file
+	//============================================
+public:
+	static double getObjStringAsDouble(TDirectory* dir, std::string name){
+		auto str = (TObjString*)dir->Get(name.c_str());
+		return CxxUtilities::String::toDouble(str->GetString());
+	}
+	static double readObjStringAsDouble(TDirectory* dir, std::string name){
+		return getObjStringAsDouble(dir, name);
+	}
+
+
+public:
+	static int getObjStringAsInteger(TDirectory* dir, std::string name){
+		auto str = (TObjString*)dir->Get(name.c_str());
+		return CxxUtilities::String::toInteger(str->GetString());
+	}
+	static int readObjStringAsInteger(TDirectory* dir, std::string name){
+		return getObjStringAsInteger(dir, name);
+	}
+
+public:
+	static bool getObjStringAsBoolean(TDirectory* dir, std::string name){
+		auto str = (TObjString*)dir->Get(name.c_str());
+		return CxxUtilities::String::toBoolean(std::string(str->GetString()));
+	}
+	static bool readObjStringAsBoolean(TDirectory* dir, std::string name){
+		return getObjStringAsBoolean(dir, name);
+	}
+
+public:
+	static std::string getObjStringAsString(TDirectory* dir, std::string name){
+		auto str = (TObjString*)dir->Get(name.c_str());
+		std::string s(str->GetString()));
+		return s;
+	}
+	static std::string readObjStringAsString(TDirectory* dir, std::string name){
+		return getObjStringAsString(dir, name);
+	}
+
+	//============================================
+	// Write TObjString to file
+	//============================================
 public:
 	static void writeObjString(std::string name, std::string value) {
 		auto str = new TObjString(value.c_str());
