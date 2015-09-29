@@ -256,6 +256,136 @@ public:
 		return ss.str();
 	}
 
+	static std::string join(std::vector<size_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << list[i];
+			} else {
+				ss << list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<uint8_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (uint32_t)list[i];
+			} else {
+				ss << (uint32_t)list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<uint16_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (uint32_t)list[i];
+			} else {
+				ss << (uint32_t)list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<uint32_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (uint32_t)list[i];
+			} else {
+				ss << (uint32_t)list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<uint64_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << list[i];
+			} else {
+				ss << list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<int8_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (int8_t)list[i];
+			} else {
+				ss << (int8_t)list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<int16_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (int32_t)list[i];
+			} else {
+				ss << (int32_t)list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<int32_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (int32_t)list[i];
+			} else {
+				ss << (int32_t)list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<int64_t> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << list[i];
+			} else {
+				ss << list[i] << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
+	static std::string join(std::vector<bool> list, std::string conjunction) {
+		std::stringstream ss;
+		size_t size = list.size();
+		for (unsigned int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				ss << (list[i]? "true":"false") ;
+			} else {
+				ss << (list[i]? "true":"false") << conjunction;
+			}
+		}
+		return ss.str();
+	}
+
 	static std::vector<std::string> getRangeOf(std::vector<std::string>& list, int from, int to) {
 		std::vector<std::string> newlist;
 		size_t size = list.size();
