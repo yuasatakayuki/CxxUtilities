@@ -256,6 +256,7 @@ public:
 		return ss.str();
 	}
 
+#ifndef RASPBERRY_PI
 	static std::string join(std::vector<size_t> list, std::string conjunction) {
 		std::stringstream ss;
 		size_t size = list.size();
@@ -268,6 +269,7 @@ public:
 		}
 		return ss.str();
 	}
+#endif
 
 	static std::string join(std::vector<uint8_t> list, std::string conjunction) {
 		std::stringstream ss;
