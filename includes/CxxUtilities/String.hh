@@ -310,19 +310,6 @@ public:
 		return ss.str();
 	}
 
-	static std::string join(std::vector<uint64_t> list, std::string conjunction) {
-		std::stringstream ss;
-		size_t size = list.size();
-		for (unsigned int i = 0; i < size; i++) {
-			if (i == size - 1) {
-				ss << list[i];
-			} else {
-				ss << list[i] << conjunction;
-			}
-		}
-		return ss.str();
-	}
-
 	static std::string join(std::vector<int8_t> list, std::string conjunction) {
 		std::stringstream ss;
 		size_t size = list.size();
@@ -357,19 +344,6 @@ public:
 				ss << (int32_t)list[i];
 			} else {
 				ss << (int32_t)list[i] << conjunction;
-			}
-		}
-		return ss.str();
-	}
-
-	static std::string join(std::vector<int64_t> list, std::string conjunction) {
-		std::stringstream ss;
-		size_t size = list.size();
-		for (unsigned int i = 0; i < size; i++) {
-			if (i == size - 1) {
-				ss << list[i];
-			} else {
-				ss << list[i] << conjunction;
 			}
 		}
 		return ss.str();
