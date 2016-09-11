@@ -142,7 +142,7 @@ public:
 		char* buffer = new char[MaximumFilenameLength];
 		getcwd(buffer, MaximumFilenameLength);
 		std::string path(buffer);
-		delete buffer;
+		delete[] buffer;
 		return path;
 	}
 
