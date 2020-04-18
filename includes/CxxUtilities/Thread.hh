@@ -41,6 +41,8 @@ public:
 	}
 
 	virtual ~Thread() {
+		/* pthread_join must be called to free thread resources */
+		pthread_join(threadid, NULL);
 	}
 
 	virtual int start() {
